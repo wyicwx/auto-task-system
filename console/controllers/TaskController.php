@@ -93,10 +93,42 @@ class TaskController extends Controller {
             $schedule->uid = $task['uid'];
             $schedule->tid = $task['id'];
             $schedule->mid = $task['model']['id'];
-            $schedule->status = $correct ? 0 : 1;
+            $schedule->status = $correct ? Schedule::STATUS_SUCCESS : Schedule::STATUS_FAIL;
             $schedule->result = $msg;
 
             $schedule->save();
         }
+    }
+
+    public function actionNotice() {
+        $failSchedule = Schedule::find()
+            ->where([
+                'status' => Schedule::STATUS_FAIL
+            ])
+            ->with('user');
+
+        $result = $failSchedule->asArray()->all();
+
+        $info = [];
+
+        foreach ($result as $item) {
+            if(!array_key_exists($item['uid'], $info)) {
+                $info[$item['uid']] = [
+                    'user' => $item['user'],
+                    'result' => []
+                ];
+            }
+
+            $info[$item['uid']]['result'][] = $item['result'];
+        }
+
+        $result = Yii::$app->mailer->compose('test')
+            // ->setFrom(['cwx.xiaoc@gmail.com' => '自动任务系统'])
+            ->setFrom('cwx.xiaoc@gmail.com')
+            ->setTo('236008243@qq.com')
+            ->setSubject('失败任务汇总')
+            ->send();
+
+        echo 'result:'.$result;
     }
 }

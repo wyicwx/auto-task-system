@@ -7,8 +7,12 @@ use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use common\models\TaskModel;
 use common\models\Task;
+use common\models\User;
 
 class Schedule extends ActiveRecord {
+    const STATUS_FAIL = 1;
+    const STATUS_SUCCESS = 0;
+
     public function behaviors()
     {
         return [
@@ -23,6 +27,12 @@ class Schedule extends ActiveRecord {
 
     public static function tableName() {
         return '{{%schedule}}';
+    }
+
+    public function getUser() {
+        return $this->hasOne(User::className(), [
+            'id' => 'uid'
+        ]);
     }
 
     public function getModel() {

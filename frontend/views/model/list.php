@@ -26,7 +26,7 @@ use yii\widgets\LinkPager;
                     <th scope="row"><?= $item['id']; ?></th> 
                     <td><?= $item['name']; ?></td> 
                     <td><?= $item['description'] ? $item['description'] : '--'; ?></td>
-                    <td><?= $item['status'] === 0 ? '下架' : '上架'; ?></td>
+                    <td><?= $item['status'] === 0 ? '下架' : '<span class="label label-success">上架</span>'; ?></td>
                     <td>--</td>
                     <td>
                         <a href="/task/create?mid=<?= $item['id']; ?>">创建任务</a>
