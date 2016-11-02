@@ -16,7 +16,7 @@ use common\models\Task;
                     <th>状态</th>
                     <th>运行次数</th>
                     <th>操作</th> 
-                </tr> 
+                </tr>
             </thead> 
             <tbody> 
                 <?php foreach ($model as $item) { ?>

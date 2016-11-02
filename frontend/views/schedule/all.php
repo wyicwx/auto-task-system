@@ -36,7 +36,7 @@ use yii\widgets\LinkPager;
                                 <?= $item['status'] == 0 ? '<span class="label label-success">成功</span>' : '<span class="label label-danger">失败</span>'; ?>
                             </td>
                             <td>
-                                <?= $item['status'] == 0 ? '--' : $item['result'] ?>
+                                <?= $item['status'] == 0 ? '--' : \yii\helpers\HtmlPurifier::process($item['result']) ?>
                             </td>
                             <td>
                                 <?= $item['create_time']; ?>
