@@ -41,7 +41,7 @@ use yii\helpers\Html;
                     <label>描述</label>
                 </div>
                 <div class="col-md-5">
-                    <input type="text" name="description" class="form-control" value="<?php echo $model->description; ?>">
+                    <textarea type="text" name="description" class="form-control" style="resize: none;"><?php echo $model->description; ?></textarea>
                 </div>
             </div>
 
@@ -57,7 +57,7 @@ use yii\helpers\Html;
                             可以使用的函数 json_encode、json_decode
                         </li>
                         <li>
-                            执行上下文提供 <a href="https://github.com/rmccue/Requests" target="_blank">Requests</a> 对象，用来发起http请求！文档地址 <a href="http://requests.ryanmccue.info/api/class-Requests.html">这里</a>
+                            提供 <a href="https://github.com/rmccue/Requests" target="_blank">Requests</a> 对象，用来发起http请求！文档地址 <a href="http://requests.ryanmccue.info/api/class-Requests.html">这里</a>
                         </li>
                         <li>
                             数据类型可以直接作为变量使用，如定义了名为cookie的数据类型，可直接在代码中使用$cookie
