@@ -29,7 +29,7 @@ use yii\helpers\Html;
 
             <div class="row form-group">
                 <div class="col-md-1">
-                    <label>任务名</label>
+                    <label>模板名称</label>
                 </div>
                 <div class="col-md-5">
                     <input type="text" name="name" class="form-control" value="<?php echo $model->name; ?>">
@@ -54,13 +54,13 @@ use yii\helpers\Html;
                 <div class="col-md-11">
                     <ol class="alert alert-warning" style="padding-left: 35px;">
                         <li>
-                            可以使用的函数 json_encode、json_decode
+                            允许使用函数：json_encode、json_decode、rand
                         </li>
                         <li>
-                            提供 <a href="https://github.com/rmccue/Requests" target="_blank">Requests</a> 对象，用来发起http请求！文档地址 <a href="http://requests.ryanmccue.info/api/class-Requests.html">这里</a>
+                            提供 <a href="https://github.com/rmccue/Requests" target="_blank">Requests</a> 对象，发起http请求，<a href="http://requests.ryanmccue.info/api/class-Requests.html">文档地址</a>
                         </li>
                         <li>
-                            数据类型可以直接作为变量使用，如定义了名为cookie的数据类型，可直接在代码中使用$cookie
+                            数据类型可以直接作为变量使用，如定义了名为cookie的数据类型，可直接在代码中使用 $cookie
                         </li>
                     </ol>
 
@@ -101,9 +101,10 @@ use yii\helpers\Html;
             <div class="row">
                 <div class="col-md-offset-1 col-md-11">
                     <button type="submit" class="btn btn-primary">保存</button>
+
+                    <a class="btn" href="javascript:void(0)">检查语法</a>
                 </div>
             </div>
-
         </form>
     </div>
 </div>
@@ -142,20 +143,9 @@ $this->registerJs("
         indentUnit: 4,
         indentWithTabs: false,
         matchBrackets: true,
-        viewportMargin: Infinity
+        viewportMargin: Infinity,
+        lineWrapping: true
     });
-
-    // $('textarea[name=\"code\"]').on('input', function() {
-    //     var code = this.value;
-    //     var matches = code.match(/\\n/g);
-    //     var times = 3;
-
-    //     if(matches && matches.length > 3) {
-    //         times = matches.length;
-    //     }
-
-    //     $(this).prop('rows', times+1);
-    // });
 ");
 ?>
 </script>

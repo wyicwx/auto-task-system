@@ -24,9 +24,8 @@ use common\models\UserAuth;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
-    const STATUS_ACTIVE = 1;
-
+    const STATUS_DELETED = -1;
+    const STATUS_ACTIVE = 0;
 
     /**
      * @inheritdoc

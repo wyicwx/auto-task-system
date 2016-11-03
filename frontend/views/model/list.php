@@ -15,7 +15,7 @@ use yii\widgets\LinkPager;
                     <th>id</th> 
                     <th>名称</th> 
                     <th>描述</th> 
-                    <th>状态</th>
+                    <th>是否公开</th>
                     <th>使用人数</th>
                     <th>操作</th> 
                 </tr> 
@@ -26,7 +26,7 @@ use yii\widgets\LinkPager;
                     <th scope="row"><?= $item['id']; ?></th> 
                     <td><?= $item['name']; ?></td> 
                     <td><?= $item['description'] ? $item['description'] : '--'; ?></td>
-                    <td><?= $item['status'] === 0 ? '下架' : '<span class="label label-success">上架</span>'; ?></td>
+                    <td><?= $item['status'] === 0 ? '' : '<span class="label label-success">上架</span>'; ?></td>
                     <td>--</td>
                     <td>
                         <a href="/task/create?mid=<?= $item['id']; ?>">创建任务</a>
