@@ -22,4 +22,26 @@ class BaseController extends Controller {
              $this->redirect('/site/login');
         }
     }
+
+    public function renderAjax($params = [], $code = 0, $message = '') {
+        return parent::renderAjax('@app/views/layouts/ajax', [
+            'code' => $code,
+            'data' => $params,
+            'msg' => $message
+        ]);
+    }
+
+    public function renderAjaxList($list, $pages, $data = []) {
+        $pages = [
+            'page' => (int) $pages->page + 1,
+            'total' => (int) $pages->totalCount,
+            'perpage' => (int) $pages->pageSize,
+            'pageCount' => (int) $pages->pageCount
+        ];
+
+        return $this->renderAjax([
+            'list' => $list,
+            'pages' => $pages
+        ]);
+    }
 }

@@ -30,32 +30,18 @@ class TaskController extends BaseController {
     }
 
     public function actionList() {
-        $limit = 10;
-        $list = Task::getTaskList(Yii::$app->user->id);
-        $model = $list->limit($limit)->all();
-        $pages = new Pagination(['totalCount' => $list->count(), 'pageSize' => $limit]);
+        $list = Task::find()
+                    ->where(['uid' => Yii::$app->user->id]);
 
-        $modelIds = [];
+        $pages = new Pagination(['totalCount' => $list->count()]);
 
-        foreach ($model as $item) {
-            array_push($modelIds, $item['mid']);
-        }
+        $list = $list->limit($pages->limit)
+                    ->offset($pages->offset)
+                    ->with('model')
+                    ->asArray()
+                    ->all();
 
-        $modelIds = array_unique($modelIds);
-
-        $taskModelsResult = TaskModel::getTaskModelListByIds($modelIds)->limit($limit)->all();;
-
-        $taskModels = [];
-
-        foreach ($taskModelsResult as $item) {
-            $taskModels[$item['id']] = $item;
-        }
-
-        return $this->render('list', [
-            'pages' => $pages,
-            'model' => $model,
-            'taskModels' => $taskModels
-        ]);
+        return $this->renderAjaxList($list, $pages);
     }
 
     public function actionUpdate() {
@@ -74,7 +60,6 @@ class TaskController extends BaseController {
                 return 'success';
             }
         }
-
 
         return $this->render('task', [
             'task' => $taskModel,
