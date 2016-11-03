@@ -8,23 +8,23 @@ return [
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',
-            // 'useFileTransport' => false,    //这里一定要改成false，不然邮件不会发送
+            'useFileTransport' => false,    
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.163.com',
+                'username' => 'task_auto@163.com',
+                'password' => 'woleigequ1123456',
+                'port' => '465',
+                'encryption' => 'ssl',
+            ],
             // 'transport' => [
             //     'class' => 'Swift_SmtpTransport',
-            //     'host' => 'smtp.gmail.com',
-            //     'username' => 'cwx.xiaoc@gmail.com',
-            //     'password' => 'fengfeng',        //如果是163邮箱，此处要填授权码
+            //     'host' => 'smtp.qq.com',
+            //     'username' => '236008243@qq.com',
+            //     'password' => 'fengfeng',        
             //     'port' => '587',
             //     'encryption' => 'tls',
             // ],
-            'transport' => [
-                'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.qq.com',
-                // 'username' => '236008243@qq.com',
-                // 'password' => 'fengfeng',        //如果是163邮箱，此处要填授权码
-                'port' => '587',
-                'encryption' => 'tls',
-            ],
         ],
     ],
     'language' => 'zh-CN',

@@ -100,12 +100,31 @@ class TaskController extends Controller {
         }
     }
 
-    public function actionNotice() {
+    public function actionNotice($during) {
+
+        $yesterday = date('Y-m-d 18:00:00', strtotime('-1 day'));
+        $todayAM = date('Y-m-d 9:00:00');
+        $todayPM = date('Y-m-d 18:00:00');
+
+        if($during == 'am') {
+            $startTime = $yesterday;
+            $endTime = $todayAM;
+        } else if($during == 'pm') {
+            $startTime = $todayAM;
+            $endTime = $todayPM;
+        } else {
+            return;
+        }
+
         $failSchedule = Schedule::find()
             ->where([
                 'status' => Schedule::STATUS_FAIL
             ])
-            ->with('user');
+            ->andWhere(['>', 'create_time', $startTime])
+            ->andWhere(['<=', 'create_time', $endTime])
+            ->with('user')
+            ->with('model')
+            ->orderBy('create_time desc');
 
         $result = $failSchedule->asArray()->all();
 
@@ -119,16 +138,27 @@ class TaskController extends Controller {
                 ];
             }
 
-            $info[$item['uid']]['result'][] = $item['result'];
+            $info[$item['uid']]['result'][] = [
+                'mid' => $item['model']['id'],
+                'tid' => $item['tid'],
+                'mname' => $item['model']['name'],
+                'create_time' => $item['create_time'],
+                'result' => $item['result']
+            ];
         }
 
-        $result = Yii::$app->mailer->compose('test')
-            // ->setFrom(['cwx.xiaoc@gmail.com' => '自动任务系统'])
-            ->setFrom('cwx.xiaoc@gmail.com')
-            ->setTo('236008243@qq.com')
-            ->setSubject('失败任务汇总')
-            ->send();
+        foreach ($info as $item) {
+            $result = Yii::$app->mailer->compose('test', $item)
+                ->setFrom(['task_auto@163.com' => '自动任务系统'])
+                ->setTo('236008243@qq.com')
+                ->setSubject('失败任务汇总')
+                ->send();
 
-        echo 'result:'.$result;
+            if($result) {
+                Yii::error('send mail:'.$result);
+            }
+        }
+
+        return 0;
     }
 }

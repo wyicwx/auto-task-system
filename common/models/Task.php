@@ -6,6 +6,7 @@ use yii\base\Model;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use common\models\TaskModel;
+use common\models\Schedule;
 
 class Task extends ActiveRecord {
     const STATUS_RUN = 1;
@@ -36,12 +37,20 @@ class Task extends ActiveRecord {
 
         if($uid) {
             $query = $query->where(['uid' => $uid]);
+            // $query = $query->joinWith('times');
         }
+
+
+        // echo $query->createCommand()->getRawSql();exit;
 
         return $query;
     }
 
     public function getModel() {
         return $this->hasOne(TaskModel::className(), ['id' => 'mid']);
+    }
+
+    public function getTimes() {
+        return $this->hasMany(Schedule::className(), ['tid' => 'id']);
     }
 }

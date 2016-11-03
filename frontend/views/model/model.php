@@ -31,7 +31,7 @@ use yii\helpers\Html;
                 <div class="col-md-1">
                     <label>任务名</label>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-5">
                     <input type="text" name="name" class="form-control" value="<?php echo $model->name; ?>">
                 </div>
             </div>
@@ -40,7 +40,7 @@ use yii\helpers\Html;
                 <div class="col-md-1">
                     <label>描述</label>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-5">
                     <input type="text" name="description" class="form-control" value="<?php echo $model->description; ?>">
                 </div>
             </div>
@@ -51,15 +51,21 @@ use yii\helpers\Html;
                         代码
                     </label>
                 </div>
-                <div class="col-md-8">
-                    <textarea class="form-control" name="code" rows="4" cols="100"><?php echo $model->code; ?></textarea>
-                </div>
-                <div class="col-md-3">
-                    <div>
-                        1、执行上下文提供 <a href="https://github.com/rmccue/Requests" target="_blank">Requests</a> 对象，用来发起http请求！文档地址 <a href="http://requests.ryanmccue.info/api/class-Requests.html">这里</a>
-                    </div><br>
-                    <div>
-                        2、数据类型可以直接作为变量使用，如定义了名为cookie的数据类型，可直接在代码中使用$cookie
+                <div class="col-md-11">
+                    <ol class="alert alert-warning" style="padding-left: 35px;">
+                        <li>
+                            可以使用的函数 json_encode、json_decode
+                        </li>
+                        <li>
+                            执行上下文提供 <a href="https://github.com/rmccue/Requests" target="_blank">Requests</a> 对象，用来发起http请求！文档地址 <a href="http://requests.ryanmccue.info/api/class-Requests.html">这里</a>
+                        </li>
+                        <li>
+                            数据类型可以直接作为变量使用，如定义了名为cookie的数据类型，可直接在代码中使用$cookie
+                        </li>
+                    </ol>
+
+                    <div style="border: 1px solid #ccc;border-radius: 4px;overflow: hidden;">
+                        <textarea id="codeEditor" name="code" rows="4" cols="100" style="border: none;"><?php echo Html::encode($model->code); ?></textarea>
                     </div>
                 </div>
             </div>
@@ -93,7 +99,7 @@ use yii\helpers\Html;
             </div>
 
             <div class="row">
-                <div class="col-md-offset-1">
+                <div class="col-md-offset-1 col-md-11">
                     <button type="submit" class="btn btn-primary">保存</button>
                 </div>
             </div>
@@ -103,6 +109,12 @@ use yii\helpers\Html;
 </div>
 
 <?php
+$this->registerCssFile("/codemirror/codemirror.css");
+$this->registerCss(".CodeMirror {height: auto}");
+$this->registerJsFile("/codemirror/codemirror.js");
+$this->registerJsFile("/codemirror/mode/clike/clike.js");
+$this->registerJsFile("/codemirror/mode/php/php.js");
+$this->registerJsFile("/codemirror/addon/edit/matchbrackets.js");
 $this->registerJs("
     $('body').delegate('.j_plus', 'click', function(e) {
         var target = $(e.currentTarget);
@@ -124,17 +136,26 @@ $this->registerJs("
         }
     });
 
-    $('textarea[name=\"code\"]').on('input', function() {
-        var code = this.value;
-        var matches = code.match(/\\n/g);
-        var times = 3;
-
-        if(matches && matches.length > 3) {
-            times = matches.length;
-        }
-
-        $(this).prop('rows', times+1);
+    var codeMirror = CodeMirror.fromTextArea(document.getElementById('codeEditor'), {
+        mode: 'text/x-php',
+        lineNumbers: true,
+        indentUnit: 4,
+        indentWithTabs: false,
+        matchBrackets: true,
+        viewportMargin: Infinity
     });
+
+    // $('textarea[name=\"code\"]').on('input', function() {
+    //     var code = this.value;
+    //     var matches = code.match(/\\n/g);
+    //     var times = 3;
+
+    //     if(matches && matches.length > 3) {
+    //         times = matches.length;
+    //     }
+
+    //     $(this).prop('rows', times+1);
+    // });
 ");
 ?>
 </script>
