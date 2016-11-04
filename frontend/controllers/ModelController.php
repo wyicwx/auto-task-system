@@ -10,21 +10,17 @@ use common\models\User;
 
 class ModelController extends BaseController {
     public function actionCreate() {
-        $this->checkLoginStatus();
-
         $model = new TaskModelForm();
 
         if(Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post(), '');
 
             if($model->add()) {
-                return 'success';
+                return $this->renderAjax();
+            } else {
+                return $this->renderAjaxFormError($model);
             }
         }
-
-        return $this->render('model', [
-            'model' => $model
-        ]);
     }
 
     public function actionView() {
@@ -39,11 +35,6 @@ class ModelController extends BaseController {
                     ->one();
 
         return $this->renderAjax($model);
-
-        return $this->render('view', [
-            'model' => $model,
-            'maintainer' => $maintainer
-        ]);
     }
 
     public function actionUpdate() {

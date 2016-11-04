@@ -3,6 +3,7 @@ namespace common\models;
 
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
+use common\models\User;
 
 class TaskModel extends ActiveRecord {
     public static function tableName() {
@@ -24,6 +25,11 @@ class TaskModel extends ActiveRecord {
     public static function getTaskModelById($id) {
         return static::find()
                     ->where(['id' => $id]);
+    }
+    public function getUser() {
+        return $this->hasOne(User::className(), [
+            'id' => 'uid'
+        ]);
     }
     /**
      * 获取列表

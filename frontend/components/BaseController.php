@@ -31,6 +31,14 @@ class BaseController extends Controller {
         ]);
     }
 
+    public function renderAjaxError($code, $message) {
+        return $this->renderAjax([], $code, $message);
+    }
+
+    public function renderAjaxFormError($model) {
+        return $this->renderAjax($model->getErrors(), 2);
+    }
+
     public function renderAjaxList($list, $pages, $data = []) {
         $pages = [
             'page' => (int) $pages->page + 1,
