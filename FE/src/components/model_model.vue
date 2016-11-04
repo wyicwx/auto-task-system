@@ -1,22 +1,22 @@
 <template>
-<div>
+<div v-loading="model.loading" element-loading-text="拼命加载中">
     <el-breadcrumb separator="/" class="mb20">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/model/list'}">我的模板</el-breadcrumb-item>
         <el-breadcrumb-item>创建模板</el-breadcrumb-item>
     </el-breadcrumb>
-    <el-form ref="form" :model="form" label-width="80px">
+    <el-form ref="form" :model="model" label-width="80px">
         <el-row>
             <el-col :span="12">
                 <el-form-item label="模板名称">
-                    <el-input v-model="form.name" placeholder="请输入模板名称"></el-input>
+                    <el-input v-model="model.name" placeholder="请输入模板名称"></el-input>
                 </el-form-item>
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="12">
                 <el-form-item label="描述">
-                    <el-input type="textarea" v-model="form.description" placeholder="请输入描述内容"></el-input>
+                    <el-input type="textarea" v-model="model.description" placeholder="请输入描述内容"></el-input>
                 </el-form-item>
             </el-col>
         </el-row>
@@ -33,22 +33,22 @@
                 </li>
             </ol>
 
-            <code-mirror v-model="form.code"></code-mirror>
+            <code-mirror v-model="model.code"></code-mirror>
         </el-form-item>
 
         <el-form-item label="数据类型">
-            <el-row v-for="(item, index) in datatype">
+            <el-row v-for="(item, index) in model.datatype">
                 <el-col :span="12">
-                    <el-input class="mb10" placeholder="请添加数据类型" v-model="item.value">
-                        <el-select slot="prepend" v-model="item.select" placeholder="请选择">
+                    <el-input class="mb10" placeholder="请添加数据类型" v-model="item.name" :disabled="type == 'edit'">
+                        <el-select slot="prepend" v-model="item.type" placeholder="请选择" :disabled="type == 'edit'">
                             <el-option label="String" value="string"></el-option>
                             <el-option label="Number" value="number"></el-option>
                         </el-select>
                     </el-input>
                 </el-col>
-                <el-col :span="12" class="pl10">
+                <el-col :span="12" class="pl10" v-if="type == 'new'">
                     <el-button type="" @click="addDataType(index)" icon="plus"></el-button>
-                    <el-button type="" v-if="datatype.length > 1" @click="removeDataType(index)" icon="minus"></el-button>
+                    <el-button type="" v-if="model.datatype.length > 1" @click="removeDataType(index)" icon="minus"></el-button>
                 </el-col>
             </el-row>
         </el-form-item>
@@ -73,36 +73,40 @@ module.exports = {
     components: {
         'code-mirror': CodeMirror
     },
-    watch: {
-        form() {
-            console.log(arguments);
-        }
-    },
     data() {
         return {
-            form: {
-                code: 'echo 111;'
-            },
-            datatype: [{
-                select: 'string',
-                value: ''
-            }]
+            type: 'new'
+        }
+    },
+    computed: {
+        model() {
+            return this.$store.state.model;
+        }
+    },
+    created() {
+        if(this.$route.params.id) {
+            this.type = 'edit';
+            this.$store.dispatch('model.fetch', {
+                id: this.$route.params.id
+            });
+        } else {
+            this.type = 'new';
+            this.$store.commit('model.reset');
         }
     },
     methods: {
         addDataType(index) {
-            this.datatype.splice(index + 1, 0, {
-                select: 'string',
-                value: ''
-            });
+            this.$store.commit('model.addDataType', index);
         },
         removeDataType(index) {
-            this.datatype.splice(index, 1);
-        },
-        select(index) {
+            this.$store.commit('model.removeDataType', index);
         },
         save() {
-            debugger;
+            if(this.type == 'edit') {
+                this.$store.dispatch('model.update', this.model);
+            } else {
+                this.$store.dispatch('model.create', this.model);
+            }
         }
     }
 };

@@ -9,39 +9,29 @@
     </div>
 
     <el-table v-loading.body="modelList.loading" :data="modelList.list" style="width: 100%">
-        <el-table-column prop="name" label="名称"></el-table-column>
+        <el-table-column prop="name" label="名称">
+            <template scope="scope">
+                <router-link :to="'/model/view/'+scope.row.id" target="_blank">{{scope.row.name}}</router-link>
+            </template>
+        </el-table-column>
         <el-table-column prop="status" :formatter="statusFormatter" label="是否公开" width="100"></el-table-column>
         <el-table-column prop="update_time" label="更新时间" width="180"></el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="100">
             <template scope="scope">
+            
             <el-button
-              @click.native.prevent=""
-              type="text"
-              size="small">
-              暂停
-            </el-button>
-
-            <el-button
-              @click.native.prevent=""
+              @click.native.prevent="jump('/model/model/'+scope.row.id)"
               type="text"
               size="small">
               编辑
             </el-button>
 
             <el-button
-              @click.native.prevent=""
+              @click.native.prevent="deleteModel(scope.row.id)"
               type="text"
               size="small">
               删除
             </el-button>
-
-            <el-button
-              @click.native.prevent=""
-              type="text"
-              size="small">
-              运行状态
-            </el-button>
-
             
           </template>
         </el-table-column>
@@ -77,12 +67,28 @@ module.exports = {
                 page
             });
         },
+        jump(url) {
+            this.$router.push(url);
+        },
         statusFormatter(item, col) {
             if(item.status == 0) {
                 return '私有';
             } else if(item.status == 1) {
                 return '公开';
             }
+        },
+        deleteModel(id) {
+            this.$confirm('此操作将永久删除该模板, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                return this.$store.dispatch('model.delete', {
+                    id
+                });
+            }).then(() => {
+                return this.$store.dispatch('model.list.fetch');
+            }).catch(() => {});
         }
     }
 };

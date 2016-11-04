@@ -48,7 +48,7 @@
             </el-menu-item>
         </el-menu>
     </div>
-    <div class="main">
+    <div class="main" :style="{minHeight: minHeight + 'px'}">
         <el-row>
             <el-col :span="24">
                 <router-view></router-view>
@@ -63,10 +63,25 @@
 'use strict';
 
 module.exports = {
+    data() {
+        return {
+            minHeight: 0
+        }
+    },
     methods: {
         logout() {
             debugger;
+        },
+        calcMinHeight() {
+            this.minHeight = window.innerHeight;
         }
+    },
+    mounted() {
+        this.calcMinHeight();
+
+        window.addEventListener('resize', () => {
+            this.calcMinHeight();
+        });
     }
 };
 </script>

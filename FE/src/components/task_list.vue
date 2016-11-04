@@ -1,16 +1,23 @@
 <template>
 <div>
     <el-table v-loading.body="taskList.loading" :data="taskList.list" style="width: 100%">
-        <el-table-column prop="model.name" label="代码模板" width="180"></el-table-column>
-        <el-table-column prop="status" :formatter="statusFormatter" label="状态" width="180">
-            
+        <el-table-column label="代码模板">
+            <template scope="scope">
+                <router-link :to="'/model/view/'+scope.row.id">{{scope.row.model.name}}</router-link>
+            </template>
+        </el-table-column>
+        <el-table-column label="状态" width="180">
+            <template scope="scope">
+                <el-tag :close-transition="true" type="gray" v-if="scope.row.status == 1">暂停</el-tag>
+                <el-tag :close-transition="true" type="success" v-if="scope.row.status == 0">运行</el-tag>
+            </template>
         </el-table-column>
         <el-table-column prop="remark" :formatter="retainFormatter" label="备注"></el-table-column>
         <el-table-column prop="times" :formatter="retainFormatter" label="运行次数"></el-table-column>
         <el-table-column label="操作">
             <template scope="scope">
             <el-button
-              @click.native.prevent=""
+              @click.native.prevent="pauseTask(scope.row.id)"
               type="text"
               size="small">
               暂停
@@ -69,14 +76,6 @@ module.exports = {
         this.$store.dispatch('task.list.fetch');
     },
     methods: {
-        // 格式化状态
-        statusFormatter(item) {
-            if(item.status == 1) {
-                return '运行';
-            } else if(item.status == 0) {
-                return '暂停';
-            }
-        },
         // 格式化保留字符
         retainFormatter(item, col) {
             if(item[col.property]) {
@@ -88,6 +87,15 @@ module.exports = {
         goPage(page) {
             this.$store.dispatch('task.list.fetch', {
                 page: page
+            });
+        },
+        pauseTask(id) {
+            this.$confirm('是否暂停该任务?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+
             });
         }
     }

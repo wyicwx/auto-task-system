@@ -17,23 +17,32 @@ require('../../vendors/codemirror/codemirror.css');
 
 module.exports = {
     props: {
-        value: String
+        value: String,
+        readonly: Boolean
+    },
+    watch: {
+        value() {
+            var value = this.cm.getValue();
+
+            if(value != this.value) {
+                this.cm.setValue(this.value);
+            }
+        }
     },
     mounted() {
-        CodeMirror.fromTextArea(this.$refs.textarea, {
+        this.cm = CodeMirror.fromTextArea(this.$refs.textarea, {
             mode: 'text/x-php',
             lineNumbers: true,
             indentUnit: 4,
             indentWithTabs: false,
             matchBrackets: true,
             viewportMargin: Infinity,
-            lineWrapping: true
+            lineWrapping: true,
+            readOnly: this.readonly
         });
-    },
-    methods: {
-        change() {
-            debugger;
-        }
+        this.cm.on('change', () => {
+            this.$emit('input', this.cm.getValue());
+        });
     }
 }
 </script>
