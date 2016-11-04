@@ -1,0 +1,49 @@
+@import './helper.less';
+
+html, body {
+    min-width: 1200px;
+}
+
+.p_dashboard {
+    display: flex;
+    min-height: 600px;
+    .sider {
+        width: 200px;
+        min-height: 100%;
+        .el-menu {
+            border-radius: 0;
+            height: 100%;
+        }
+    }
+    .main {
+        flex: 1;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+}
+
+.w_codemirror {
+    background-color: #fff;
+    border: 1px solid #bfcbd9;
+    border-radius: 4px;
+    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    line-height: 1.5;
+    height: auto;
+    overflow: hidden;
+    .CodeMirror {
+        height: auto;
+    }
+}
+.w_alert_warning {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+    line-height: 1.5;
+    a {
+        color: #20A0FF;
+    }
+}
