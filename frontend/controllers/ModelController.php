@@ -10,15 +10,15 @@ use common\models\User;
 
 class ModelController extends BaseController {
     public function actionCreate() {
-        $model = new TaskModelForm();
+        $form = new TaskModelForm();
 
         if(Yii::$app->request->isPost) {
-            $model->load(Yii::$app->request->post(), '');
+            $form->load(Yii::$app->request->post(), '');
 
-            if($model->add()) {
+            if($form->add()) {
                 return $this->renderAjax();
             } else {
-                return $this->renderAjaxFormError($model);
+                return $this->renderAjaxFormError($form);
             }
         }
     }
@@ -38,49 +38,62 @@ class ModelController extends BaseController {
     }
 
     public function actionUpdate() {
-        $this->checkLoginStatus();
-
-        $id = Yii::$app->request->get('id');
-
-        $form = new TaskModelForm();
-
-        $model = TaskModel::getTaskModelById($id);
-        $form->loadFromDB($model->asArray()->one(), '');
-
         if(Yii::$app->request->isPost) {
+            $id = Yii::$app->request->post('id');
+
+            $model = TaskModel::find()
+                        ->where([
+                            'id' => $id,
+                            'uid' => Yii::$app->user->id
+                        ])
+                        ->asArray()
+                        ->one();
+            
+            if(!$model) {
+                return $this->renderAjaxError(3);
+            }
+
+            $form = new TaskModelForm();
+            $form->loadFromDB($model, '');
             $form->load(Yii::$app->request->post(), '');
 
             if($form->save()) {
-                return 'success';
+                return $this->renderAjax();
+            } else {
+                return $this->renderAjaxFormError($form);
             }
         }
-
-        return $this->render('model', [
-            'model' => $form
-        ]);
     }
 
     public function actionDelete() {
+        if(!Yii::$app->request->isPost) {
+            return $this->renderAjaxError();
+        }
+
         $id = Yii::$app->request->post('id');
 
-        $taskModelAR = TaskModel::findOne()
+        $taskModelAR = TaskModel::find()
                     ->where([
                         'uid' => Yii::$app->user->id,
                         'id' => $id
-                    ]);
+                    ])
+                    ->one();
 
         $taskModelAR->status = -1;
 
         if($taskModelAR->save()) {
-            $this->renderAjax();
+            return $this->renderAjax();
         } else {
-            $this->renderAjax(null, 1);
+            return $this->renderAjaxError(1);
         }
     }
 
     public function actionList() {
         $listAR = TaskModel::find()
-                    ->where(['uid' => Yii::$app->user->id]);
+                    ->where([
+                        'uid' => Yii::$app->user->id
+                    ])
+                    ->andWhere(['!=', 'status', '-1']);
 
         $pages = new Pagination(['totalCount' => $listAR->count()]);
 

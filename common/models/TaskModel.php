@@ -6,6 +6,8 @@ use yii\behaviors\TimestampBehavior;
 use common\models\User;
 
 class TaskModel extends ActiveRecord {
+    const DATATYPE = ['string', 'number'];
+
     public static function tableName() {
         return '{{%model}}';
     }
