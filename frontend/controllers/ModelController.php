@@ -68,18 +68,34 @@ class ModelController extends BaseController {
     }
 
     public function actionDelete() {
+        $id = Yii::$app->request->post('id');
 
+        $taskModelAR = TaskModel::findOne()
+                    ->where([
+                        'uid' => Yii::$app->user->id,
+                        'id' => $id
+                    ]);
+
+        $taskModelAR->status = -1;
+
+        if($taskModelAR->save()) {
+            $this->renderAjax();
+        } else {
+            $this->renderAjax(null, 1);
+        }
     }
 
     public function actionList() {
-        $limit = 10;
-        $list = TaskModel::getTaskModelList(Yii::$app->user->id);
-        $model = $list->limit($limit)->all();
-        $pages = new Pagination(['totalCount' => $list->count(), 'pageSize' => $limit]);
+        $listAR = TaskModel::find()
+                    ->where(['uid' => Yii::$app->user->id]);
 
-        return $this->render('list', [
-            'pages' => $pages,
-            'model' => $model
-        ]);
+        $pages = new Pagination(['totalCount' => $listAR->count()]);
+
+        $list = $listAR->limit($pages->limit)
+                    ->offset($pages->offset)
+                    ->asArray()
+                    ->all();
+
+        return $this->renderAjaxList($list, $pages);
     }
 }
