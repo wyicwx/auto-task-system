@@ -3,7 +3,8 @@
     <el-breadcrumb separator="/" class="mb20">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/model/list'}">我的模板</el-breadcrumb-item>
-        <el-breadcrumb-item>创建模板</el-breadcrumb-item>
+        <el-breadcrumb-item v-if="type == 'new'">创建模板</el-breadcrumb-item>
+        <el-breadcrumb-item v-if="type == 'edit'">编辑模板</el-breadcrumb-item>
     </el-breadcrumb>
     <el-form ref="form" :model="model" label-width="80px">
         <el-row>
@@ -16,7 +17,7 @@
         <el-row>
             <el-col :span="12">
                 <el-form-item label="描述">
-                    <el-input type="textarea" v-model="model.description" placeholder="请输入描述内容"></el-input>
+                    <el-input type="textarea" autosize v-model="model.description" placeholder="请输入描述内容"></el-input>
                 </el-form-item>
             </el-col>
         </el-row>

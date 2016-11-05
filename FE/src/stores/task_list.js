@@ -1,6 +1,7 @@
 'use strict';
 
-import {get} from '../helper/api';
+import { get } from '../helper/api';
+import _ from 'lodash';
 
 module.exports = {
     state: {
@@ -14,6 +15,20 @@ module.exports = {
         }
     },
     mutations: {
+        'task.list.resume': function(state, id) {
+            var item = _.find(state.list, {id: id});
+
+            if(item) {
+                item.status = 0;
+            }
+        },
+        'task.list.pause': function(state, id) {
+            var item = _.find(state.list, {id: id});
+
+            if(item) {
+                item.status = 1;
+            }
+        },
         'task.list.success': function(state, data) {
             state.loading = false;
             state.list = data.list;

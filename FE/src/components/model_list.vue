@@ -1,5 +1,10 @@
 <template>
 <div>
+    <el-breadcrumb separator="/" class="mb20">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>控制台</el-breadcrumb-item>
+        <el-breadcrumb-item>我的模板</el-breadcrumb-item>
+    </el-breadcrumb>
     <div class="mb20 clearfix">
         <router-link to="/model/model" class="f_right">
             <el-button type="primary">
@@ -16,9 +21,16 @@
         </el-table-column>
         <el-table-column prop="status" :formatter="statusFormatter" label="是否公开" width="100"></el-table-column>
         <el-table-column prop="update_time" label="更新时间" width="180"></el-table-column>
-        <el-table-column label="操作" width="100">
+        <el-table-column label="操作" width="180">
             <template scope="scope">
             
+            <el-button
+              @click.native.prevent="jump('/task/create/'+scope.row.id)"
+              type="text"
+              size="small">
+              创建任务
+            </el-button>
+
             <el-button
               @click.native.prevent="jump('/model/model/'+scope.row.id)"
               type="text"
@@ -53,19 +65,29 @@
 'use strict';
 
 module.exports = {
+    data() {
+        return {
+            page: 1
+        };
+    },
     computed: {
         modelList() {
             return this.$store.state.modelList;
         }
     },
-    mounted() {
-        this.$store.dispatch('model.list.fetch');
+    created() {
+        this.$store.commit('model.list.reset');
+        this.refreshList();
     },
     methods: {
-        goPage(page) {
+        refreshList() {
             this.$store.dispatch('model.list.fetch', {
-                page
+                page: this.page
             });
+        },
+        goPage(page) {
+            this.page = page;
+            this.refreshList();
         },
         jump(url) {
             this.$router.push(url);

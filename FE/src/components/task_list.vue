@@ -1,9 +1,14 @@
 <template>
 <div>
+    <el-breadcrumb separator="/" class="mb20">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>控制台</el-breadcrumb-item>
+        <el-breadcrumb-item>我的任务</el-breadcrumb-item>
+    </el-breadcrumb>
     <el-table v-loading.body="taskList.loading" :data="taskList.list" style="width: 100%">
         <el-table-column label="代码模板">
             <template scope="scope">
-                <router-link :to="'/model/view/'+scope.row.id">{{scope.row.model.name}}</router-link>
+                <router-link :to="'/model/view/'+scope.row.mid" target="_blank">{{scope.row.model.name}}</router-link>
             </template>
         </el-table-column>
         <el-table-column label="状态" width="180">
@@ -16,35 +21,42 @@
         <el-table-column prop="times" :formatter="retainFormatter" label="运行次数"></el-table-column>
         <el-table-column label="操作">
             <template scope="scope">
-            <el-button
-              @click.native.prevent="pauseTask(scope.row.id)"
-              type="text"
-              size="small">
-              暂停
-            </el-button>
+                <el-button
+                  v-if="scope.row.status == 0"
+                  @click.native.prevent="pauseTask(scope.row.id)"
+                  type="text"
+                  size="small">
+                  暂停
+                </el-button>
 
-            <el-button
-              @click.native.prevent=""
-              type="text"
-              size="small">
-              编辑
-            </el-button>
+                <el-button
+                  v-if="scope.row.status == 1"
+                  @click.native.prevent="resumeTask(scope.row.id)"
+                  type="text"
+                  size="small">
+                  继续
+                </el-button>
 
-            <el-button
-              @click.native.prevent=""
-              type="text"
-              size="small">
-              删除
-            </el-button>
+                <el-button
+                  @click.native.prevent="jump('/task/task/'+scope.row.id)"
+                  type="text"
+                  size="small">
+                  编辑
+                </el-button>
 
-            <el-button
-              @click.native.prevent=""
-              type="text"
-              size="small">
-              运行状态
-            </el-button>
+                <el-button
+                  @click.native.prevent="deleteTask(scope.row.id)"
+                  type="text"
+                  size="small">
+                  删除
+                </el-button>
 
-            
+                <el-button
+                  @click.native.prevent=""
+                  type="text"
+                  size="small">
+                  运行状态
+                </el-button>            
           </template>
         </el-table-column>
     </el-table>
@@ -67,15 +79,25 @@
 var {mapState, mapGetters} = require('vuex');
 
 module.exports = {
+    data() {
+        return {
+            page: 1
+        }
+    },
     computed: {
         taskList() {
             return this.$store.state.taskList;
         }
     },
-    mounted() {
-        this.$store.dispatch('task.list.fetch');
+    created() {
+        this.refreshList();
     },
     methods: {
+        refreshList() {
+            this.$store.dispatch('task.list.fetch', {
+                page: this.page
+            });
+        },
         // 格式化保留字符
         retainFormatter(item, col) {
             if(item[col.property]) {
@@ -84,10 +106,12 @@ module.exports = {
                 return '--';
             }
         },
+        jump(url) {
+            this.$router.push(url);
+        },
         goPage(page) {
-            this.$store.dispatch('task.list.fetch', {
-                page: page
-            });
+            this.page = page;
+            this.refreshList();
         },
         pauseTask(id) {
             this.$confirm('是否暂停该任务?', '提示', {
@@ -95,7 +119,33 @@ module.exports = {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-
+                return this.$store.dispatch('task.pause', {
+                    id
+                });
+            });
+        },
+        deleteTask(id) {
+            this.$confirm('此操作将永久删除该任务, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                return this.$store.dispatch('task.delete', {
+                    id
+                });
+            }).then(() => {
+                this.refreshList();
+            });
+        },
+        resumeTask(id) {
+            this.$confirm('是否继续该任务?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                return this.$store.dispatch('task.resume', {
+                    id
+                });
             });
         }
     }

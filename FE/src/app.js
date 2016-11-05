@@ -16,8 +16,9 @@ let store = new Vuex.Store(require('./stores/app.js'));
 const router = new VueRouter({
     routes: [
         { path: '/dashboard', component: require('./components/dashboard.vue')},
-        { path: '/task/market', component: require('./components/task_market.vue')},
-        { path: '/task/task', component: require('./components/task_task.vue')},
+        { path: '/model/market', component: require('./components/model_market.vue')},
+        { path: '/task/task/:id', component: require('./components/task_task.vue')},
+        { path: '/task/create/:mid', component: require('./components/task_task.vue')},
         { path: '/task/list', component: require('./components/task_list.vue')},
         { path: '/task/view', component: require('./components/task_view.vue')},
         { path: '/model/model', component: require('./components/model_model.vue')},
@@ -28,7 +29,7 @@ const router = new VueRouter({
         { path: '/user/profile', component: require('./components/user_profile.vue')},
         { path: '/statistics/task', component: require('./components/statistics_task.vue')},
         { path: '/statistics/model', component: require('./components/statistics_model.vue')},
-        { path: '*', redirect: '/dashboard'}
+        { path: '*', redirect: '/task/list'}
     ]
 });
 
