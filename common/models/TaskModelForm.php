@@ -4,6 +4,7 @@ namespace common\models;
 use Yii;
 use yii\base\Model;
 use common\models\TaskModel;
+use common\components\SandBox;
 
 class TaskModelForm extends Model {
     public $id;
@@ -17,6 +18,7 @@ class TaskModelForm extends Model {
         return [
             [['name', 'code'], 'required'],
             [['datatype'], 'validateDatatype'],
+            ['code', 'codeValidate'],
             [['id', 'description'], 'safe']
         ];
     }
@@ -42,6 +44,18 @@ class TaskModelForm extends Model {
                     return false;
                 }
             }
+        }
+    }
+
+    public function codeValidate($attribute, $params) {
+        if(!$this->hasErrors()) {
+            $result = SandBox::checkSyntax($this->code);
+
+            if($result) {
+                $this->addError($attribute, $result);
+                return false;
+            }
+            return true;
         }
     }
 
