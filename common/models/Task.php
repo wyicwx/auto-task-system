@@ -9,8 +9,9 @@ use common\models\TaskModel;
 use common\models\Schedule;
 
 class Task extends ActiveRecord {
-    const STATUS_RUN = 1;
-    const STATUS_PAUSE = 0;
+    const STATUS_RUN = 0;
+    const STATUS_PAUSE = 1;
+    const STATUS_DELETE = -1;
     const FREQUENCY = [1, 2, 3, 4, 6, 12, 24];
 
     public function behaviors()

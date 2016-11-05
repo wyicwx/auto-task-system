@@ -22,15 +22,18 @@ class UserController extends BaseController {
                 $identity->email = Yii::$app->request->post('email');
                 $identity->save();
 
-                return 'success';
+                return $this->renderAjax();
+            } else {
+                return $this->renderAjaxFormError($form);
             }
         } else {
-            $form->load(Yii::$app->user->identity->attributes, '');
-        }
+            $data = Yii::$app->user->identity->attributes;
 
-        return $this->render('profile', [
-            'form' => $form
-        ]);
+            unset($data['password']);
+            unset($data['auth_key']);
+
+            return $this->renderAjax($data);
+        }
     }
 
     public function actionPassword() {
@@ -42,13 +45,13 @@ class UserController extends BaseController {
                 Yii::$app->user->identity->setPassword($form->newpassword);
                 Yii::$app->user->identity->save();
 
-                return 'success';
+                return $this->renderAjax();
+            } else {
+                return $this->renderAjaxFormError($form);
             }
+        } else {
+            return $this->renderAjaxError();
         }
-
-        return $this->render('password', [
-            'form' => $form
-        ]);
     }
 
     public function actionView() {

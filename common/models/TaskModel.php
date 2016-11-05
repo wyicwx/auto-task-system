@@ -7,6 +7,9 @@ use common\models\User;
 
 class TaskModel extends ActiveRecord {
     const DATATYPE = ['string', 'number'];
+    const STATUS_DELETE = -1;
+    const STATUS_PUBLIC = 1;
+    const STATUS_PRIVATE = 0;
 
     public static function tableName() {
         return '{{%model}}';

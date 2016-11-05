@@ -153,6 +153,12 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->auth_key;
     }
 
+    public function getAvatar() {
+        $email = trim($this->email);
+        $email = strtolower($email);
+        return 'https://www.gravatar.com/avatar/'.md5($email);
+    }
+
     /**
      * @inheritdoc
      */
