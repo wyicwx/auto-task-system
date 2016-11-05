@@ -5,9 +5,9 @@ namespace console\controllers;
 use Yii;
 use yii\console\Controller;
 use common\models\Task;
-use PHPSandbox\PHPSandbox;
-use Requests;
+use common\components\SandBox;
 use common\models\Schedule;
+use common\models\LogCrontab;
 
 class TaskController extends Controller {
     // 根据当前时间获取可用频率范围
@@ -24,18 +24,47 @@ class TaskController extends Controller {
 
         return $result;
     }
-    
-    public function actionRun() {
-        $frequency = $this->getFrequencyByHour();
 
-        $all = Task::find()->where([
-            'status' => 1,
-            'frequency' => $frequency
-        ])->with('model')->asArray()->all();
+    public function actionSchedule() {
+        $frequency = $this->getFrequencyByHour();
+        $all = Task::find()
+            ->where([
+                'status' => Task::STATUS_RUN,
+                'frequency' => $frequency
+            ])
+            ->limit(20)
+            ->asArray()
+            ->all();
 
         foreach ($all as $task) {
-            $code = $task['model']['code'];
-            $data = json_decode($task['data'], true);
+            $schedule = new Schedule();
+
+            $schedule->uid = $task['uid'];
+            $schedule->tid = $task['id'];
+            $schedule->mid = $task['mid'];
+            $schedule->status = Schedule::STATUS_UNRUN;
+            $schedule->result = '';
+
+            $schedule->save();
+        }
+    }
+    
+    public function actionRun() {
+        $all = Schedule::find()
+                ->where([
+                    'status' => Schedule::STATUS_UNRUN
+                ])
+                ->with(['task', 'model'])
+                ->all();
+
+        $failTimes = 0;
+
+        foreach ($all as $schedule) {
+            $task = $schedule->task;
+            $model = $schedule->model;
+            $code = $model->code;
+
+            $data = json_decode($task->data, true);
 
             ob_start();
 
@@ -48,27 +77,7 @@ class TaskController extends Controller {
             $taskCode = ob_get_contents();
             ob_end_clean();
 
-            $sandbox = new PHPSandbox();
-            $sandbox->whitelistFunc([
-                'rand',
-                'json_decode',
-                'json_encode'
-            ]);
-            $sandbox->whitelistClass([
-                'Requests'
-            ]);
-            ob_start();
-
-            try {
-                $result = $sandbox->execute($taskCode);
-            } catch(Exception $e) {
-                $result = [
-                    'code' => -2,
-                    'msg' => '执行报错！'
-                ];
-            }
-
-            ob_end_clean();
+            $result = SandBox::execute($taskCode);
 
             $correct = false;
             $msg = '';
@@ -88,16 +97,19 @@ class TaskController extends Controller {
                 }
             }
 
-            $schedule = new Schedule();
+            if(!$correct) {
+                $failTimes++;
+            }
 
-            $schedule->uid = $task['uid'];
-            $schedule->tid = $task['id'];
-            $schedule->mid = $task['model']['id'];
             $schedule->status = $correct ? Schedule::STATUS_SUCCESS : Schedule::STATUS_FAIL;
             $schedule->result = $msg;
-
             $schedule->save();
         }
+
+        $log = new LogCrontab();
+        $log->times = count($all);
+        $log->fail_times = $failTimes;
+        $log->save();
     }
 
     public function actionNotice($during) {
