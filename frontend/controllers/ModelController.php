@@ -109,9 +109,17 @@ class ModelController extends BaseController {
 
         $list = $listAR->limit($pages->limit)
                     ->offset($pages->offset)
-                    ->asArray()
                     ->all();
 
-        return $this->renderAjaxList($list, $pages);
+        $result = [];
+        foreach ($list as $item) {
+            $info = $item->attributes;
+            $info['user'] = $item->user->attributes;
+            $info['user']['avatar'] = $item->user->avatar;
+
+            $result[] = $info;
+        }
+
+        return $this->renderAjaxList($result, $pages);
     }
 }
