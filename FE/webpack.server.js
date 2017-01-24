@@ -33,7 +33,7 @@ var server = new WebpackDevServer(compiler, {
     // Control the console log messages shown in the browser when using inline mode. Can be `error`, `warning`, `info` or `none`.
 
     // It's a required option.
-    publicPath: "/static/js/",
+    publicPath: "/",
     headers: {
         "X-Custom-Header": "yes"
     },
