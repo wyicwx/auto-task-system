@@ -8,7 +8,7 @@
 
             <el-submenu index="/task">
                 <template slot="title"><i class="el-icon-date"></i>任务</template>
-                <el-menu-item index="/task/market">
+                <el-menu-item index="/model/market">
                     模板商店
                 </el-menu-item>
                 <el-menu-item index="/task/list">
