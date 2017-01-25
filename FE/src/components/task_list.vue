@@ -1,13 +1,13 @@
 <template>
 <div>
-    <el-table v-loading.body="loading" :data="tableData" style="width: 100%">
+    <el-table v-loading.body="taskList.loading" :data="taskList.list" style="width: 100%">
         <el-table-column prop="model.name" label="代码模板" width="180"></el-table-column>
-        <el-table-column prop="status" label="状态" width="180">
+        <el-table-column prop="status" :formatter="statusFormatter" label="状态" width="180">
             
         </el-table-column>
-        <el-table-column prop="remark" label="备注"></el-table-column>
-        <el-table-column prop="times" label="运行次数"></el-table-column>
-        <el-table-column prop="address" label="操作">
+        <el-table-column prop="remark" :formatter="retainFormatter" label="备注"></el-table-column>
+        <el-table-column prop="times" :formatter="retainFormatter" label="运行次数"></el-table-column>
+        <el-table-column label="操作">
             <template scope="scope">
             <el-button
               @click.native.prevent=""
@@ -41,26 +41,54 @@
           </template>
         </el-table-column>
     </el-table>
-    <el-pagination v-show="!loading"
+    <el-pagination v-show="!taskList.loading"
         layout="prev, pager, next"
-        :total="50">
+        :page-size="taskList.pages.perpage"
+        :page-count="taskList.pages.pageCount"
+        :current-page="taskList.pages.page"
+        :total="taskList.pages.totalCount"
+        @current-change="goPage"
+    >
     </el-pagination>
 </div>
 </template>
 
 <script type="text/javascript">
+'use strict';
+
+var {mapState, mapGetters} = require('vuex');
+
 module.exports = {
-    data() {
-        return {
-            loading: true,
-            tableData: []
-        };
+    computed: {
+        taskList() {
+            return this.$store.state.taskList;
+        }
     },
     mounted() {
-        debugger;
-        setTimeout(() => {
-            this.loading = false;
-        }, 1000);
+        this.$store.dispatch('task.list.fetch');
+    },
+    methods: {
+        // 格式化状态
+        statusFormatter(item) {
+            if(item.status == 1) {
+                return '运行';
+            } else if(item.status == 0) {
+                return '暂停';
+            }
+        },
+        // 格式化保留字符
+        retainFormatter(item, col) {
+            if(item[col.property]) {
+                return item[col.property];
+            } else {
+                return '--';
+            }
+        },
+        goPage(page) {
+            this.$store.dispatch('task.list.fetch', {
+                page: page
+            });
+        }
     }
 };
 </script>
