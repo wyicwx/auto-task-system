@@ -22,6 +22,7 @@ const router = new VueRouter({
         { path: '/task/view', component: require('./components/task_view.vue')},
         { path: '/model/model', component: require('./components/model_model.vue')},
         { path: '/model/view', component: require('./components/model_view.vue')},
+        { path: '/model/list', component: require('./components/model_list.vue')},
         { path: '/user/password', component: require('./components/user_password.vue')},
         { path: '/user/profile', component: require('./components/user_profile.vue')},
         { path: '/statistics/task', component: require('./components/statistics_task.vue')},

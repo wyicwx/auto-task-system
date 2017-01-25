@@ -2,8 +2,13 @@
 
 module.exports = {
     state: {
+        
     },
     modules: {
-        taskList: require('./task_list.js')
+        taskList: require('./task_list.js'),
+        modelList: require('./model_list.js')
     },
+    actions: {
+
+    }
 };

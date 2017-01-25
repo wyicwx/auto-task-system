@@ -41,7 +41,8 @@
           </template>
         </el-table-column>
     </el-table>
-    <el-pagination v-show="!taskList.loading"
+    <el-pagination
+        v-show="taskList.pages.pageCount > 1"
         layout="prev, pager, next"
         :page-size="taskList.pages.perpage"
         :page-count="taskList.pages.pageCount"

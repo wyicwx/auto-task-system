@@ -14,29 +14,29 @@ module.exports = {
         }
     },
     mutations: {
-        'task.list.success': function(state, data) {
+        'model.list.success': function(state, data) {
             state.loading = false;
             state.list = data.list;
             state.pages = data.pages;
         },
-        'task.list.fail': function() {
+        'model.list.fail': function(state) {
             state.loading = false;
         },
-        'task.list.loading': function(state) {
+        'model.list.loading': function(state) {
             state.loading = true;
         }
     },
     actions: {
-        'task.list.fetch': function(context, params = {}) {
-            context.commit('task.list.loading');
+        'model.list.fetch': function(context, params = {}) {
+            context.commit('model.list.loading');
 
-            get('/task/list', {
+            get('/model/list', {
                 page: params.page || 1
             }).then((data) => {
-                context.commit('task.list.success', data);
+                context.commit('model.list.success', data);
             }, () => {
-                context.commit('task.list.fail');
+                context.commit('model.list.fail');
             });
         }
     }
-};
+}

@@ -50,6 +50,16 @@ var server = new WebpackDevServer(compiler, {
                 Cookie: 'advanced-frontend=ukk2l4302p4umtsv98ielf0rd6; _csrf-frontend=51ed6b4eb05fbfa8de9e1499307d2b3dad663d330a00417ae886f5fb523f9ccaa%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22ffEU3GXXHPtI7u7FkogGwWrAo5bfYjqi%22%3B%7D; _task_wx_=ac349143d77862cac6bacb0e435b0af8ee3f0dc31fa2f95d39d5bbfd7d54581aa%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_task_wx_%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22oRrTor58XmmkaWQmvMSLt79S9oTj73qn%22%2C2592000%5D%22%3B%7D'
             },
             secure: false  
+        },
+        '/model/*': {
+            target: 'http://task.weixin.com',
+            // changeOrigin: true,
+            headers: {
+                Host: 'task.weixin.com',
+                Referer: 'http://task.weixin.com',
+                Cookie: 'advanced-frontend=ukk2l4302p4umtsv98ielf0rd6; _csrf-frontend=51ed6b4eb05fbfa8de9e1499307d2b3dad663d330a00417ae886f5fb523f9ccaa%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22ffEU3GXXHPtI7u7FkogGwWrAo5bfYjqi%22%3B%7D; _task_wx_=ac349143d77862cac6bacb0e435b0af8ee3f0dc31fa2f95d39d5bbfd7d54581aa%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_task_wx_%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22oRrTor58XmmkaWQmvMSLt79S9oTj73qn%22%2C2592000%5D%22%3B%7D'
+            },
+            secure: false  
         }
     }
 });

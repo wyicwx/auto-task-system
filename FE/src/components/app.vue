@@ -14,7 +14,7 @@
                 <el-menu-item index="/task/list">
                     我的任务
                 </el-menu-item>
-                <el-menu-item index="/model/model">
+                <el-menu-item index="/model/list">
                     我的模板
                 </el-menu-item>
             </el-submenu>
