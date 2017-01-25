@@ -42,13 +42,7 @@ module.exports = {
         ]
     },
     devServer: {
-        inline: true,
-        proxy: {
-            '/api/*': {  
-                target: 'http://task.weixin.com',  
-                secure: false  
-            }
-        }
+        inline: true
     },
     plugins: [
         new HtmlWebpackPlugin({

@@ -11,7 +11,7 @@
                 <el-menu-item index="/task/market">
                     模板商店
                 </el-menu-item>
-                <el-menu-item index="/task/task">
+                <el-menu-item index="/task/list">
                     我的任务
                 </el-menu-item>
                 <el-menu-item index="/model/model">
@@ -43,7 +43,7 @@
                 </el-menu-item>
             </el-submenu>
 
-            <el-menu-item index="" @click="logout">
+            <el-menu-item index="/logout" @click="logout">
                 <i class="el-icon-upload2"></i>退出
             </el-menu-item>
         </el-menu>
@@ -60,6 +60,8 @@
 </template>
 
 <script type="text/javascript">
+'use strict';
+
 module.exports = {
     methods: {
         logout() {

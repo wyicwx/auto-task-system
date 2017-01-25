@@ -5,5 +5,6 @@
 </template>
 
 <script type="text/javascript">
+'use strict';
 
 </script>
