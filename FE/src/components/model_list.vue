@@ -2,11 +2,9 @@
 <div>
     <div class="mb20 clearfix">
         <router-link to="/model/model" class="f_right">
-            <solt>
-                <el-button type="primary">
-                创建模板
-                </el-button>
-            </solt>
+            <el-button type="primary">
+            创建模板
+            </el-button>
         </el-button>
     </div>
 

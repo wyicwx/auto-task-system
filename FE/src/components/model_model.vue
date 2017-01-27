@@ -1,5 +1,10 @@
 <template>
 <div>
+    <el-breadcrumb separator="/" class="mb20">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/model/list'}">我的模板</el-breadcrumb-item>
+        <el-breadcrumb-item>创建模板</el-breadcrumb-item>
+    </el-breadcrumb>
     <el-form ref="form" :model="form" label-width="80px">
         <el-row>
             <el-col :span="12">
@@ -35,8 +40,8 @@
             <el-row v-for="(item, index) in datatype">
                 <el-col :span="12">
                     <el-input class="mb10" placeholder="请添加数据类型" v-model="item.value">
-                        <el-select v-model="item.select" slot="prepend" @change="">
-                            <el-option label="String" value="string" selected></el-option>
+                        <el-select slot="prepend" v-model="item.select" placeholder="请选择">
+                            <el-option label="String" value="string"></el-option>
                             <el-option label="Number" value="number"></el-option>
                         </el-select>
                     </el-input>
@@ -49,12 +54,16 @@
         </el-form-item>
 
         <el-form-item>
-            <el-button type="success">保存</el-button>
+            <el-button type="success" @click="save">保存</el-button>
         </el-form-item>
     </el-form>
 </div>
 </template>
-
+<style type="text/css">
+.el-input-group__prepend .el-select .el-input input {
+    width: 100px;
+}
+</style>
 <script type="text/javascript">
 'use strict';
 
@@ -76,7 +85,7 @@ module.exports = {
             },
             datatype: [{
                 select: 'string',
-                value: '111'
+                value: ''
             }]
         }
     },
@@ -91,6 +100,9 @@ module.exports = {
             this.datatype.splice(index, 1);
         },
         select(index) {
+        },
+        save() {
+            debugger;
         }
     }
 };

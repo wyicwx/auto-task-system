@@ -30,13 +30,15 @@ class ModelController extends BaseController {
     public function actionView() {
         $id = Yii::$app->request->get('id');
 
-        $model = new TaskModel([
-            'id' => $id
-        ]);
-        $model->refresh();
+        $model = TaskModel::find()
+                    ->where([
+                        'id' => $id
+                    ])
+                    ->with('user')
+                    ->asArray()
+                    ->one();
 
-        $maintainer = new User(['id' => $model->uid]);
-        $maintainer->refresh();
+        return $this->renderAjax($model);
 
         return $this->render('view', [
             'model' => $model,
