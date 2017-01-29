@@ -5,20 +5,23 @@ import {each} from 'lodash';
 var csrf = 'd1pENThvMmoDIwlXeyRnCRUWLXd3AkgmMmoHf2JeY1wvDQpDVQdnOg==';
 var csrfParam = '_csrf-frontend';
 
+function parseBody(body) {
+    return each(body, function(value, key) {
+        params.push([key, value].join('='));
+    }).join('&');
+}
+
 module.exports = {
     get: function(url, body = {}, headers) {
         var params = [];
 
         body[csrfParam] = csrf;
 
-        each(body, function(value, key) {
-            params.push([key, value].join('='));
-        });
-
         if(url.indexOf('?') === -1) {
             url += '?';
         }
-        url += params.join('&');
+
+        url += parseBody(body);
 
         return fetch(url, {
             method: 'get',
@@ -43,7 +46,7 @@ module.exports = {
         return fetch(url, {
             method: 'post',
             headers: headers,
-            body: JSON.stringify(body)
+            body: parseBody(body)
         }).then((res) => {
             if(res.ok) {
                 return res.json();

@@ -10,17 +10,14 @@ class TaskModelForm extends Model {
     public $name;
     public $description;
     public $code;
-    public $datatype_name = [''];
-    public $datatype_type = ['string'];
     public $status = 0;
-
-    private $datatype;
+    public $datatype;
 
     public function rules() {
         return [
             [['name', 'code'], 'required'],
-            [['datatype_name'], 'validateDatatype'],
-            [['id', 'datatype_type', 'description'], 'safe']
+            [['datatype'], 'validateDatatype'],
+            [['id', 'description'], 'safe']
         ];
     }
 
