@@ -19,8 +19,17 @@ module.exports = {
     props: {
         value: String
     },
+    watch: {
+        value() {
+            var value = this.cm.getValue();
+
+            if(value != this.value) {
+                this.cm.setValue(this.value);
+            }
+        }
+    },
     mounted() {
-        CodeMirror.fromTextArea(this.$refs.textarea, {
+        this.cm = CodeMirror.fromTextArea(this.$refs.textarea, {
             mode: 'text/x-php',
             lineNumbers: true,
             indentUnit: 4,
@@ -29,11 +38,9 @@ module.exports = {
             viewportMargin: Infinity,
             lineWrapping: true
         });
-    },
-    methods: {
-        change() {
-            debugger;
-        }
+        this.cm.on('change', () => {
+            this.$emit('input', this.cm.getValue());
+        });
     }
 }
 </script>
