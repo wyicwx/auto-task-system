@@ -5,6 +5,7 @@ import {get, post} from '../helper/api.js';
 
 module.exports = {
     state: {
+        id: '',
         name: '',
         description: '',
         code: '',
@@ -12,6 +13,7 @@ module.exports = {
             value: '',
             select: 'string'
         }],
+        user: '',
         loading: false
     },
     mutations: {
@@ -25,12 +27,15 @@ module.exports = {
             state.datatype.splice(index, 1);
         },
         'model.setModel': function(state, data) {
+            state.id = data.id;
             state.name = data.name;
             state.code = data.code;
             state.description = data.description;
             state.datatype = JSON.parse(data.datatype);
+            state.user = data.user;
         },
         'model.reset': function(state) {
+            state.id = '';
             state.name = '';
             state.description = '';
             state.code = '';
@@ -38,6 +43,11 @@ module.exports = {
                 value: '',
                 select: 'string'
             }];
+            state.user = {};
+            state.loading = false;
+        },
+        'model.saving': function(state) {
+            state.saving = true;
         }
     },
     actions: {
@@ -62,6 +72,7 @@ module.exports = {
         },
         'model.update': function(context, params) {
             var keys = [
+                'id',
                 'name',
                 'code',
                 'description',
@@ -70,10 +81,16 @@ module.exports = {
 
             var data = _.pick(params, keys);
 
-            debugger;
-            // data.datatype = JSON.stringify(data.datatype);
-
             return post('/model/update', data);
+        },
+        'model.delete': function(context, params) {
+            var keys = [
+                'id'
+            ];
+
+            var data = _.pick(params, keys);
+
+            return post('/model/delete', data);
         }
     }
 };

@@ -7,6 +7,7 @@ module.exports = {
     modules: {
         taskList: require('./task_list.js'),
         modelList: require('./model_list.js'),
-        model: require('./model.js')
+        model: require('./model.js'),
+        statisticsTaskList: require('./statistics_task_list.js')
     }
 };
