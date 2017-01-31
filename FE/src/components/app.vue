@@ -2,20 +2,20 @@
 <div class="p_dashboard">
     <div class="sider">
         <el-menu theme="dark" :router="true">
-            <el-menu-item index="/dashboard">
+            <!-- <el-menu-item index="/dashboard">
                 <i class="el-icon-menu"></i>控制台
-            </el-menu-item>
+            </el-menu-item> -->
 
             <el-submenu index="/task">
-                <template slot="title"><i class="el-icon-date"></i>任务</template>
-                <el-menu-item index="/model/market">
-                    模板商店
-                </el-menu-item>
+                <template slot="title"><i class="el-icon-date"></i>控制台</template>
                 <el-menu-item index="/task/list">
                     我的任务
                 </el-menu-item>
                 <el-menu-item index="/model/list">
                     我的模板
+                </el-menu-item>
+                <el-menu-item index="/model/market">
+                    模板商店
                 </el-menu-item>
             </el-submenu>
 
@@ -26,9 +26,9 @@
                 <el-menu-item index="/statistics/task">
                     任务状况
                 </el-menu-item>
-                <el-menu-item index="/statistics/model">
+                <!-- <el-menu-item index="/statistics/model">
                     模板状况
-                </el-menu-item>
+                </el-menu-item> -->
             </el-submenu>
 
             <el-submenu index="/user">
@@ -43,8 +43,10 @@
                 </el-menu-item>
             </el-submenu>
 
-            <el-menu-item index="/logout" @click="logout">
-                <i class="el-icon-upload2"></i>退出
+            <el-menu-item index="" @click="logout">
+                <span href="javascript:void(0)" @click="logout">
+                    <i class="el-icon-upload2"></i>退出
+                </span>
             </el-menu-item>
         </el-menu>
     </div>

@@ -24,6 +24,16 @@ module.exports = {
         },
         'model.list.loading': function(state) {
             state.loading = true;
+        },
+        'model.list.reset': function(state) {
+            state.loading = true;
+            state.list = [];
+            state.pages = {
+                page: 1,
+                total: 0,
+                perpage: 20,
+                total: 1
+            };
         }
     },
     actions: {
@@ -32,6 +42,18 @@ module.exports = {
 
             get('/model/list', {
                 page: params.page || 1
+            }).then((data) => {
+                context.commit('model.list.success', data);
+            }, () => {
+                context.commit('model.list.fail');
+            });
+        },
+        'model.market.fetch': function(context, params ={}) {
+            context.commit('model.list.loading');
+
+            get('/model/list', {
+                page: params.page || 1,
+                market: 1
             }).then((data) => {
                 context.commit('model.list.success', data);
             }, () => {

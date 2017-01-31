@@ -1,5 +1,10 @@
 <template>
 <div>
+    <el-breadcrumb separator="/" class="mb20">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>数据统计</el-breadcrumb-item>
+        <el-breadcrumb-item>任务状况</el-breadcrumb-item>
+    </el-breadcrumb>
     <el-table v-loading.body="list.loading" :data="list.list" style="width: 100%">
         <el-table-column prop="update_time" label="执行时间"></el-table-column>
         <el-table-column label="执行状态" width="100">
@@ -17,7 +22,7 @@
         </el-table-column>
         <el-table-column label="执行结果" width="180">
             <template scope="scope">
-                <a href="javascript:void(0)" v-if="scope.row.status != 0" @click="showDetail(scope.row.result)">查看</a>
+                <a href="javascript:void(0)" v-if="scope.row.status != 0" @click="showDetail(scope.row.result)">查看详情</a>
             </template>
         </el-table-column>
         <el-table-column label="操作" width="100">

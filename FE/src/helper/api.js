@@ -76,6 +76,8 @@ module.exports = {
                     showClose: true
                 });
             }
+
+            return Promise.reject(data);
         });
     },
     post: function(url, body = {}, headers = {}, globMessage = true) {
@@ -97,13 +99,12 @@ module.exports = {
             }
         }).then((data) => {
             if(data.code === 0) {
-
                 if(globMessage) {
                     Message.success({
                         message: data.msg,
                         duration: 2000,
                         showClose: true
-                    })
+                    });
                 }
 
                 return data.data;
@@ -111,20 +112,23 @@ module.exports = {
                 return Promise.reject(data);
             }
         }).catch((data) => {
-            if(!globMessage) return;
-            if(data && data.msg) {
-                Message.error({
-                    message: data.msg,
-                    duration: 2000,
-                    showClose: true
-                });
-            } else {
-                Message.error({
-                    message: '系统错误！请重试！',
-                    duration: 2000,
-                    showClose: true
-                });
+            if(globMessage) {
+                if(data && data.msg) {
+                    Message.error({
+                        message: data.msg,
+                        duration: 2000,
+                        showClose: true
+                    });
+                } else {
+                    Message.error({
+                        message: '系统错误！请重试！',
+                        duration: 2000,
+                        showClose: true
+                    });
+                }
             }
+
+            return Promise.reject(data);
         });
     }
 };
