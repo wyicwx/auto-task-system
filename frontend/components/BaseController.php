@@ -31,7 +31,7 @@ class BaseController extends Controller {
         ]);
     }
 
-    public function renderAjaxError($code, $message) {
+    public function renderAjaxError($code = -2, $message = '') {
         return $this->renderAjax([], $code, $message);
     }
 

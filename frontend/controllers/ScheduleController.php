@@ -8,7 +8,7 @@ use common\models\Schedule;
 use yii\data\Pagination;
 
 class ScheduleController extends BaseController {
-    public function actionAll() {
+    public function actionList() {
         $uid = Yii::$app->user->id;
         $tid = Yii::$app->request->get('tid');
 
@@ -21,20 +21,18 @@ class ScheduleController extends BaseController {
         }
 
         $scheduleList = Schedule::find()
-            ->where($where)
-            ->with(['model', 'task']);
+            ->where($where);
 
         $pages = new Pagination(['totalCount' => $scheduleList->count()]);
 
+        $list = $scheduleList
+            ->with(['model', 'task'])
+            ->offset($pages->offset)
+            ->limit($pages->limit)
+            ->orderBy('update_time desc')
+            ->asArray()
+            ->all();
 
-        return $this->render('all', [
-            'list' => $scheduleList
-                        ->offset($pages->offset)
-                        ->limit($pages->limit)
-                        ->orderBy('update_time desc')
-                        ->asArray()
-                        ->all(),
-            'pages' => $pages
-        ]);
+        return $this->renderAjaxList($list, $pages);
     }
 }
