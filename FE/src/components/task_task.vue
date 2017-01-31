@@ -15,7 +15,7 @@
             </el-col>
         </el-row>
         <el-row>
-            <el-col :span="12">
+            <el-col :span="18">
                 <el-form-item label="描述">
                     <el-input type="textarea" autosize v-model="model.description" disabled></el-input>
                 </el-form-item>
