@@ -11,7 +11,7 @@ class SandBox {
         'json_decode',
         'json_encode'
     ];
-    static function checkSyntax($code) {
+    static function getSandBox() {
         $sandbox = new PHPSandbox();
         $sandbox->setValidationErrorHandler(function($error) {
             return $error->getMessage();
@@ -20,6 +20,12 @@ class SandBox {
         $sandbox->whitelistClass([
             'Requests'
         ]);
+
+        return $sandbox;
+    }
+
+    static function checkSyntax($code) {
+        $sandbox = static::getSandBox();
 
         $sandbox->validate($code);
 
@@ -31,5 +37,24 @@ class SandBox {
             }
             return $error->getMessage();
         }
+    }
+
+    static function execute($code) {
+        $sandbox = static::getSandBox();
+
+        ob_start();
+
+        try {
+            $result = $sandbox->execute($code);
+        } catch(Exception $e) {
+            $result = [
+                'code' => -2,
+                'msg' => '执行报错！'
+            ];
+        }
+
+        ob_end_clean();
+
+        return $result;
     }
 }
