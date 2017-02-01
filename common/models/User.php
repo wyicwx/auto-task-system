@@ -7,7 +7,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use common\models\UserAuth;
-
+use yii\validators\EmailValidator;
 /**
  * User model
  *
@@ -100,17 +100,28 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        
+
+
         $query = static::find()
-                ->joinWith('auth')
                 ->where([
                     'status' => static::STATUS_ACTIVE,
+                ]);
+
+        $emailValidator = new EmailValidator();
+
+        if($emailValidator->validate($username)) {
+            $query = $query->andWhere([
+                'email' => $username
+            ]);
+        } else {
+            $query = $query->joinWith('auth')
+                ->andWhere([
                     UserAuth::tableName().'.identifier' => $username,
                     UserAuth::tableName().'.type' => UserAuth::TYPE_PHONE
-                ])
-                ->one();
+                ]);
+        }
 
-        return $query;
+        return $query->one();
     }
 
     /**
