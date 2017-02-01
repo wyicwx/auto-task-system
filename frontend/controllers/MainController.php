@@ -8,15 +8,20 @@ use yii\data\Pagination;
 
 class MainController extends BaseController {
     public $defaultAction = 'home';
+    public $authorize = false;
 
     public function actionHome() {
-        $user = Yii::$app->user->identity->attributes;
+        if(!Yii::$app->user->isGuest) {
+            $user = Yii::$app->user->identity->attributes;
 
-        unset($user['password']);
-        unset($user['auth_key']);
+            unset($user['password']);
+            unset($user['auth_key']);
 
-        return $this->renderPartial('home', [
-            'user' => $user
-        ]);
+            return $this->renderPartial('home', [
+                'user' => $user
+            ]);
+        } else {
+            $this->redirect('/site/login');
+        }
     }
 }

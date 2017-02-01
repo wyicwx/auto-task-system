@@ -2,7 +2,9 @@
 
 namespace frontend\models;
 
+use yii;
 use yii\base\Model;
+use common\models\User;
 
 class ProfileForm extends Model {
     public $nickname;
@@ -24,6 +26,7 @@ class ProfileForm extends Model {
                         ->where([
                             'nickname' => $this->nickname
                         ])
+                        ->andWhere(['!=', 'id', Yii::$app->user->id])
                         ->one();
 
             if($result) {
@@ -39,6 +42,7 @@ class ProfileForm extends Model {
                         ->where([
                             'email' => $this->email
                         ])
+                        ->andWhere(['!=', 'id', Yii::$app->user->id])
                         ->one();
 
             if($result) {

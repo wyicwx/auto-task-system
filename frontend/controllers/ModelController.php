@@ -94,18 +94,17 @@ class ModelController extends BaseController {
     public function actionList() {
         $isMarket = Yii::$app->request->get('market');
 
-        $listAR = TaskModel::find()
-                    ->where([
-                        'uid' => Yii::$app->user->id
-                    ]);
+        $listAR = TaskModel::find();
 
         if($isMarket) {   
-            $listAR = $listAR->andWhere([
+            $listAR = $listAR->where([
                 'status' => TaskModel::STATUS_PUBLIC
             ])
             ->with('user');
         } else {
-            $listAR = $listAR->andWhere(['!=', 'status', TaskModel::STATUS_DELETE]);
+            $listAR = $listAR->where([
+                'uid' => Yii::$app->user->id
+            ])->andWhere(['!=', 'status', TaskModel::STATUS_DELETE]);
         }
 
         $pages = new Pagination(['totalCount' => $listAR->count()]);

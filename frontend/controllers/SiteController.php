@@ -90,13 +90,15 @@ class SiteController extends BaseController
      */
     public function actionLogout()
     {
-        if(Yii::$app->request->isPost()) {
-            Yii::$app->user->logout();
+        Yii::$app->user->logout();
+        return $this->redirect('/');
+        // if(Yii::$app->request->isPost) {
+            // Yii::$app->user->logout();
 
-            return $this->renderAjax();
-        } else {
-            return $this->renderAjaxError();
-        }
+            // return $this->renderAjax();
+        // } else {
+        //     return $this->renderAjaxError();
+        // }
     }
 
     /**

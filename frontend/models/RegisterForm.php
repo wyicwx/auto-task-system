@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use yii;
 use yii\base\Model;
 use common\models\User;
 
@@ -29,6 +30,7 @@ class RegisterForm extends Model {
                         ->where([
                             'nickname' => $this->nickname
                         ])
+                        ->andWhere(['!=', 'id', Yii::$app->user->id])
                         ->one();
 
             if($result) {
@@ -44,6 +46,7 @@ class RegisterForm extends Model {
                         ->where([
                             'email' => $this->email
                         ])
+                        ->andWhere(['!=', 'id', Yii::$app->user->id])
                         ->one();
 
             if($result) {
