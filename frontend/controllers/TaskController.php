@@ -48,7 +48,7 @@ class TaskController extends BaseController {
 
     public function actionUpdate() {
         if(Yii::$app->request->isPost) {
-            $taskId = Yii::$app->request->get('id');
+            $taskId = Yii::$app->request->post('id');
 
             $task = Task::find()
                     ->where([
@@ -56,19 +56,20 @@ class TaskController extends BaseController {
                         'uid' => Yii::$app->user->id
                     ]);
 
-            $form = new TaskForm();
-            $form->loadFromDB($task->attributes, '');
+            if($task) {
+                $form = new TaskForm();
+                $form->loadFromDB($task->attributes, '');
 
-            $form->load(Yii::$app->request->post(), '');
+                $form->load(Yii::$app->request->post(), '');
 
-            if($form->save()) {
-                return $this->renderAjax();
-            } else {
-                return $this->renderAjaxFormError($form);
+                if($form->save()) {
+                    return $this->renderAjax();
+                } else {
+                    return $this->renderAjaxFormError($form);
+                }
             }
-        } else {
-            return $this->renderAjaxError();
         }
+        return $this->renderAjaxError();
     }
 
     public function actionPause() {

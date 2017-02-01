@@ -19,7 +19,8 @@ class BaseController extends Controller {
 
     protected function checkLoginStatus() {
         if(Yii::$app->user->isGuest) {
-             $this->redirect('/site/login');
+            echo $this->renderAjaxError(-1);
+            exit;
         }
     }
 
