@@ -54,7 +54,8 @@ class TaskController extends BaseController {
                     ->where([
                         'id' => $taskId,
                         'uid' => Yii::$app->user->id
-                    ]);
+                    ])
+                    ->one();
 
             if($task) {
                 $form = new TaskForm();
