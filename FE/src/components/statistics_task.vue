@@ -6,8 +6,8 @@
         <el-breadcrumb-item>任务状况</el-breadcrumb-item>
     </el-breadcrumb>
     <el-table v-loading.body="list.loading" :data="list.list" style="width: 100%">
-        <el-table-column prop="update_time" label="执行时间"></el-table-column>
-        <el-table-column label="执行状态" width="100">
+        <el-table-column prop="update_time" label="执行时间" width="180"></el-table-column>
+        <el-table-column align="center" label="执行状态" width="100">
             <template scope="scope">
                 <el-tag :close-transition="true" type="success" v-if="scope.row.status == 0">成功</el-tag>
                 <el-tag :close-transition="true" type="danger" v-if="scope.row.status == 1">失败</el-tag>
@@ -20,7 +20,7 @@
                 <router-link :to="'/model/view/'+scope.row.model.id" target="_blank">{{scope.row.model.name}}</router-link>
             </template>
         </el-table-column>
-        <el-table-column label="执行结果" width="180">
+        <el-table-column align="center" label="执行结果" width="100">
             <template scope="scope">
                 <a href="javascript:void(0)" v-if="scope.row.status != 0" @click="showDetail(scope.row.result)">查看详情</a>
             </template>
@@ -46,6 +46,11 @@
 'use strict';
 
 module.exports = {
+    data() {
+        return {
+            page: 1
+        }
+    },
     computed: {
         list() {
             return this.$store.state.statisticsTaskList;
@@ -57,13 +62,18 @@ module.exports = {
         }
     },
     created() {
-        this.$store.dispatch('statistics.task.list.fetch');
+        this.refreshList();
     },
     methods: {
-        goPage(page) {
+        refreshList() {
             this.$store.dispatch('statistics.task.list.fetch', {
-                page
+                page: this.page,
+                tid: this.$route.params.tid
             });
+        },
+        goPage(page) {
+            this.page = page;
+            this.refreshList();
         },
         showDetail(model) {
             this.$alert(model, '执行结果', {

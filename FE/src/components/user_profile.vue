@@ -8,6 +8,13 @@
     <el-form ref="form" label-width="80px">
         <el-row>
             <el-col :span="12">
+                <el-form-item label="头像">
+                    <img :src="user.avatar" class="vat dis_b" />
+
+                    <div>
+                        <a href="http://en.gravatar.com/" target="_blank">访问Gravatar修改头像</a>
+                    </div>
+                </el-form-item>
                 <el-form-item label="昵称">
                     <el-input v-model="user.nickname" placeholder="请输入昵称"></el-input>
                 </el-form-item>

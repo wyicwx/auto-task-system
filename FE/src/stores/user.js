@@ -7,9 +7,13 @@ module.exports = {
     state: {
         id: '',
         nickname: '',
-        email: ''
+        email: '',
+        role: 0
     },
     actions: {
+        'user.load': function(context, params) {
+            context.commit('user.setProfile', window.taskUser);
+        },
         'user.profile': function(context, params) {
             return get('/user/profile').then((data) => {
                 context.commit('user.setProfile', data);
@@ -43,10 +47,12 @@ module.exports = {
         }
     },
     mutations: {
-        'user.setProfile': function(state, data) {
+        'user.setProfile': function(state, data = {}) {
             state.id = data.id;
             state.nickname = data.nickname;
             state.email = data.email;
+            state.role = data.role;
+            state.avatar = data.avatar;
         }
     }
 };

@@ -3,7 +3,7 @@
     <el-breadcrumb separator="/" class="mb20">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>控制台</el-breadcrumb-item>
-        <el-breadcrumb-item>模板商店</el-breadcrumb-item>
+        <el-breadcrumb-item>公开模板</el-breadcrumb-item>
     </el-breadcrumb>
 
     <el-row>

@@ -114,8 +114,20 @@ module.exports = {
         }).catch((data) => {
             if(globMessage) {
                 if(data && data.msg) {
+                    var msg = [];
+
+                    if(data.code === 2) { // 表单填写错误
+                        msg = [];
+
+                        each(data.data, (item, key) => {
+                            msg.push(item.join(''));
+                        });
+                    } else {
+                        msg.push(data.msg);
+                    }
+
                     Message.error({
-                        message: data.msg,
+                        message: msg.join(''),
                         duration: 2000,
                         showClose: true
                     });

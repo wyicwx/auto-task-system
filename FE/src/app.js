@@ -27,6 +27,7 @@ const router = new VueRouter({
         { path: '/model/list', component: require('./components/model_list.vue')},
         { path: '/user/password', component: require('./components/user_password.vue')},
         { path: '/user/profile', component: require('./components/user_profile.vue')},
+        { path: '/statistics/task/:tid', component: require('./components/statistics_task.vue')},
         { path: '/statistics/task', component: require('./components/statistics_task.vue')},
         { path: '/statistics/model', component: require('./components/statistics_model.vue')},
         { path: '*', redirect: '/task/list'}
@@ -36,7 +37,13 @@ const router = new VueRouter({
 const app = new Vue({
     store,
     router,
-    render: h => h(App)
+    render: h => h(App),
+    created() {
+        this.$store.dispatch('user.load');
+    },
+    mounted() {
+
+    }
 }).$mount('#app');
 
 export default {};

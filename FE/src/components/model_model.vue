@@ -56,6 +56,7 @@
 
         <el-form-item>
             <el-button type="success" @click="save">保存</el-button>
+            <el-button type="info" @click="checkSyntax">语法检查</el-button>
         </el-form-item>
     </el-form>
 </div>
@@ -84,18 +85,24 @@ module.exports = {
             return this.$store.state.model;
         }
     },
-    created() {
-        if(this.$route.params.id) {
-            this.type = 'edit';
-            this.$store.dispatch('model.fetch', {
-                id: this.$route.params.id
-            });
-        } else {
-            this.type = 'new';
-            this.$store.commit('model.reset');
-        }
+    mounted() {
+        this.init();
+    },
+    beforeRouteUpdate() {
+        this.init();
     },
     methods: {
+        init() {
+            if(this.$route.params.id) {
+                this.type = 'edit';
+                this.$store.dispatch('model.fetch', {
+                    id: this.$route.params.id
+                });
+            } else {
+                this.type = 'new';
+                this.$store.commit('model.reset');
+            }
+        },
         addDataType(index) {
             this.$store.commit('model.addDataType', index);
         },
@@ -106,8 +113,15 @@ module.exports = {
             if(this.type == 'edit') {
                 this.$store.dispatch('model.update', this.model);
             } else {
-                this.$store.dispatch('model.create', this.model);
+                this.$store.dispatch('model.create', this.model).then(({id}) => {
+                    this.$router.push(`/model/model/${id}`);
+                });
             }
+        },
+        checkSyntax() {
+            this.$store.dispatch('model.code.checksyntax', {
+                code: this.model.code
+            });
         }
     }
 };

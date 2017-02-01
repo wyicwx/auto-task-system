@@ -15,7 +15,7 @@
                     我的模板
                 </el-menu-item>
                 <el-menu-item index="/model/market">
-                    模板商店
+                    公开模板
                 </el-menu-item>
             </el-submenu>
 
@@ -43,6 +43,21 @@
                 </el-menu-item>
             </el-submenu>
 
+            <el-submenu index="/admin" v-if="user.role == 1">
+                <template slot="title">
+                    <i class="el-icon-menu"></i>系统管理
+                </template>
+                <el-menu-item index="/admin/adduser">
+                    增加用户
+                </el-menu-item>
+                <el-menu-item index="/admin/resetpassword">
+                    重置密码
+                </el-menu-item>
+                <el-menu-item index="/admin/syslog">
+                    运行日志
+                </el-menu-item>
+            </el-submenu>
+
             <el-menu-item index="" @click="logout">
                 <span href="javascript:void(0)" @click="logout">
                     <i class="el-icon-upload2"></i>退出
@@ -67,7 +82,8 @@
 module.exports = {
     data() {
         return {
-            minHeight: 0
+            minHeight: 0,
+            user: this.$store.state.user
         }
     },
     methods: {

@@ -11,15 +11,15 @@
                 <router-link :to="'/model/view/'+scope.row.mid" target="_blank">{{scope.row.model.name}}</router-link>
             </template>
         </el-table-column>
-        <el-table-column label="状态" width="180">
+        <el-table-column align="center" label="状态" width="180">
             <template scope="scope">
                 <el-tag :close-transition="true" type="gray" v-if="scope.row.status == 1">暂停</el-tag>
                 <el-tag :close-transition="true" type="success" v-if="scope.row.status == 0">运行</el-tag>
             </template>
         </el-table-column>
         <el-table-column prop="remark" :formatter="retainFormatter" label="备注"></el-table-column>
-        <el-table-column prop="times" :formatter="retainFormatter" label="运行次数"></el-table-column>
-        <el-table-column label="操作">
+        <el-table-column align="center" prop="times" :formatter="retainFormatter" label="运行次数" width="100"></el-table-column>
+        <el-table-column label="操作" width="210">
             <template scope="scope">
                 <el-button
                   v-if="scope.row.status == 0"
@@ -52,7 +52,7 @@
                 </el-button>
 
                 <el-button
-                  @click.native.prevent=""
+                  @click.native.prevent="jump('/statistics/task/'+scope.row.id)"
                   type="text"
                   size="small">
                   运行状态
@@ -94,7 +94,7 @@ module.exports = {
     },
     methods: {
         refreshList() {
-            this.$store.dispatch('task.list.fetch', {
+            return this.$store.dispatch('task.list.fetch', {
                 page: this.page
             });
         },

@@ -10,8 +10,8 @@ module.exports = {
         description: '',
         code: '',
         datatype: [{
-            value: '',
-            select: 'string'
+            name: '',
+            type: 'string'
         }],
         user: '',
         loading: false
@@ -19,8 +19,8 @@ module.exports = {
     mutations: {
         'model.addDataType': function(state, index) {
             state.datatype.splice(index + 1, 0, {
-                select: 'string',
-                value: ''
+                type: 'string',
+                name: ''
             });
         },
         'model.removeDataType': function(state, index) {
@@ -40,8 +40,8 @@ module.exports = {
             state.description = '';
             state.code = '';
             state.datatype = [{
-                value: '',
-                select: 'string'
+                name: '',
+                type: 'string'
             }];
             state.user = {};
             state.loading = false;
@@ -91,6 +91,33 @@ module.exports = {
             var data = _.pick(params, keys);
 
             return post('/model/delete', data);
+        },
+        'model.publish': function(context, params) {
+            var keys = [
+                'id'
+            ];
+
+            var data = _.pick(params, keys);
+
+            return post('/model/publish', data);
+        },
+        'model.private': function(context, params) {
+            var keys = [
+                'id'
+            ];
+
+            var data = _.pick(params, keys);
+
+            return post('/model/private', data);
+        },
+        'model.code.checksyntax': function(context, params) {
+            var keys = [
+                'code'
+            ];
+
+            var data = _.pick(params, keys);
+
+            return post('/model/checksyntax', data);
         }
     }
 };
