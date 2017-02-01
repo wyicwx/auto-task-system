@@ -60537,7 +60537,7 @@
 	        'task.update': function taskUpdate(context) {
 	            var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-	            var keys = ['frequency', 'data', 'remark'];
+	            var keys = ['id', 'frequency', 'data', 'remark'];
 
 	            var data = (0, _lodash.pick)(params, keys);
 
@@ -60635,7 +60635,7 @@
 	            state.list = data.list;
 	            state.pages = data.pages;
 	        },
-	        'task.list.fail': function taskListFail() {
+	        'task.list.fail': function taskListFail(state) {
 	            state.loading = false;
 	        },
 	        'task.list.loading': function taskListLoading(state) {
@@ -61358,13 +61358,17 @@
 	        save: function save() {
 	            var this$1 = this;
 
-	            this.$store.dispatch('task.create', _.extend({
-	                mid: this.model.id
-	            }, this.task)).then(function (ref) {
-	                var id = ref.id;
+	            if(this.type == 'edit') {
+	                this.$store.dispatch('task.update', this.task);
+	            } else {
+	                this.$store.dispatch('task.create', _.extend({
+	                    mid: this.model.id
+	                }, this.task)).then(function (ref) {
+	                    var id = ref.id;
 
-	                this$1.$router.push(("/task/task/" + id));
-	            });
+	                    this$1.$router.push(("/task/task/" + id));
+	                });
+	            }
 	        }
 	    }
 	};

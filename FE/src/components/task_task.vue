@@ -103,11 +103,15 @@ module.exports = {
     },
     methods: {
         save() {
-            this.$store.dispatch('task.create', _.extend({
-                mid: this.model.id
-            }, this.task)).then(({id}) => {
-                this.$router.push(`/task/task/${id}`);
-            });
+            if(this.type == 'edit') {
+                this.$store.dispatch('task.update', this.task);
+            } else {
+                this.$store.dispatch('task.create', _.extend({
+                    mid: this.model.id
+                }, this.task)).then(({id}) => {
+                    this.$router.push(`/task/task/${id}`);
+                });
+            }
         }
     }
 };

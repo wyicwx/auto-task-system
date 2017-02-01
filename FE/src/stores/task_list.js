@@ -34,7 +34,7 @@ module.exports = {
             state.list = data.list;
             state.pages = data.pages;
         },
-        'task.list.fail': function() {
+        'task.list.fail': function(state) {
             state.loading = false;
         },
         'task.list.loading': function(state) {

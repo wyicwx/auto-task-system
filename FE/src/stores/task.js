@@ -33,6 +33,7 @@ module.exports = {
         },
         'task.update': function(context, params = {}) {
             var keys = [
+                'id',
                 'frequency',
                 'data',
                 'remark'
