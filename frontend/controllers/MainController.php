@@ -10,14 +10,13 @@ class MainController extends BaseController {
     public $defaultAction = 'home';
 
     public function actionHome() {
-        $limit = 10;
-        $list = TaskModel::getTaskModelList(null, true);
-        $model = $list->limit($limit)->all();
-        $pages = new Pagination(['totalCount' => $list->count(), 'pageSize' => $limit]);
+        $user = Yii::$app->user->identity->attributes;
 
-        return $this->render('home', [
-            'pages' => $pages,
-            'model' => $model
+        unset($user['password']);
+        unset($user['auth_key']);
+
+        return $this->renderPartial('home', [
+            'user' => $user
         ]);
     }
 }

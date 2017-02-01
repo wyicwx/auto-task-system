@@ -24,7 +24,7 @@ class TaskController extends Controller {
 
         return $result;
     }
-
+    // 每小时执行一次，排出需要执行的任务
     public function actionSchedule() {
         $frequency = $this->getFrequencyByHour();
         $all = Task::find()
@@ -48,7 +48,7 @@ class TaskController extends Controller {
             $schedule->save();
         }
     }
-    
+    // 每5分钟执行一次
     public function actionRun() {
         $all = Schedule::find()
                 ->where([
@@ -111,7 +111,7 @@ class TaskController extends Controller {
         $log->fail_times = $failTimes;
         $log->save();
     }
-
+    // 邮件汇总通知，每日9，18点通知一次
     public function actionNotice($during) {
 
         $yesterday = date('Y-m-d 18:00:00', strtotime('-1 day'));
