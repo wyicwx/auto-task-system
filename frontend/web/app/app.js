@@ -43012,16 +43012,12 @@
 	    },
 	    methods: {
 	        logout: function logout() {
-	            var this$1 = this;
-
 	            this.$confirm('确定退出?', '提示', {
 	                confirmButtonText: '确定',
 	                cancelButtonText: '取消',
 	                type: 'warning'
 	            }).then(function () {
-	                this$1.$store.dispatch('logout');
-	            }).then(function () {
-	                location.reload();
+	                location.href = '/site/logout';
 	            }).catch(function () {});
 	        },
 	        calcMinHeight: function calcMinHeight() {
