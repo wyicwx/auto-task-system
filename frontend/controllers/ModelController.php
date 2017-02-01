@@ -7,6 +7,7 @@ use common\models\TaskModel;
 use common\models\TaskModelForm;
 use yii\data\Pagination;
 use common\models\User;
+use common\components\SandBox;
 
 class ModelController extends BaseController {
     public function actionCreate() {
@@ -14,9 +15,11 @@ class ModelController extends BaseController {
 
         if(Yii::$app->request->isPost) {
             $form->load(Yii::$app->request->post(), '');
-
-            if($form->add()) {
-                return $this->renderAjax();
+            $result = $form->add();
+            if($result) {
+                return $this->renderAjax([
+                    'id' => $result->id
+                ]);
             } else {
                 return $this->renderAjaxFormError($form);
             }
@@ -113,5 +116,73 @@ class ModelController extends BaseController {
                     ->all();
 
         return $this->renderAjaxList($list, $pages);
+    }
+
+    public function actionPublish() {
+        if(Yii::$app->request->isPost) {
+            $id = Yii::$app->request->post('id');
+
+            $taskModelAR = TaskModel::find()
+                ->where([
+                    'id' => $id,
+                    'status' => TaskModel::STATUS_PRIVATE,
+                    'uid' => Yii::$app->user->id
+                ])
+                ->one();
+
+            if($taskModelAR) {
+                $taskModelAR->status = TaskModel::STATUS_PUBLIC;
+
+                if($taskModelAR->save()) {
+                    return $this->renderAjax();
+                } else {
+                    return $this->renderAjaxError();
+                }
+            } else {
+                return $this->renderAjaxError();
+            }
+        } else {
+            return $this->renderAjaxError();
+        }
+    }
+
+    public function actionPrivate() {
+        if(Yii::$app->request->isPost) {
+            $id = Yii::$app->request->post('id');
+
+            $taskModelAR = TaskModel::find()
+                ->where([
+                    'id' => $id,
+                    'status' => TaskModel::STATUS_PUBLIC,
+                    'uid' => Yii::$app->user->id
+                ])
+                ->one();
+
+            if($taskModelAR) {
+                $taskModelAR->status = TaskModel::STATUS_PRIVATE;
+
+                if($taskModelAR->save()) {
+                    return $this->renderAjax();
+                } else {
+                    return $this->renderAjaxError();
+                }
+            } else {
+                return $this->renderAjaxError();
+            }
+        } else {
+            return $this->renderAjaxError();
+        }
+    }
+
+    public function actionChecksyntax() {
+        if(Yii::$app->request->isPost) {
+            $code = Yii::$app->request->post('code');
+
+            if(SandBox::checkSyntax($code)) {
+                return $this->renderAjaxError(4);
+            } else {
+                return $this->renderAjax();
+            }
+        }
     }
 }

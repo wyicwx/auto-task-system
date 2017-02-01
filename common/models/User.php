@@ -50,6 +50,17 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    public function beforeSave($insert)  
+    {  
+        if(parent::beforeSave($insert)) {  
+            $this->setAvatar();
+
+            return true;
+        } else{  
+            return false;  
+        }
+    }
+
     /**
      * @inheritdoc
      */
@@ -153,10 +164,10 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->auth_key;
     }
 
-    public function getAvatar() {
+    public function setAvatar() {
         $email = trim($this->email);
         $email = strtolower($email);
-        return 'https://www.gravatar.com/avatar/'.md5($email);
+        $this->avatar = 'https://www.gravatar.com/avatar/'.md5($email);
     }
 
     /**
