@@ -38,7 +38,8 @@ module.exports = {
 
         return fetch(url, {
             method: 'get',
-            headers: headers
+            headers: headers,
+            credentials: 'include'
         }).then((res) => {
             if(res.ok) {
                 return res.json();
@@ -88,6 +89,7 @@ module.exports = {
         return fetch(url, {
             method: 'post',
             headers: headers,
+            credentials: 'include',
             body: JSON.stringify(body)
         }).then((res) => {
             if(res.ok) {
