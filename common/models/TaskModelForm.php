@@ -16,10 +16,10 @@ class TaskModelForm extends Model {
 
     public function rules() {
         return [
-            [['name', 'code'], 'required'],
+            [['name', 'code', 'description'], 'required'],
             [['datatype'], 'validateDatatype'],
             ['code', 'codeValidate'],
-            [['id', 'description'], 'safe']
+            [['id'], 'safe']
         ];
     }
 

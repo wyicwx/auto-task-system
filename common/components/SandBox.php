@@ -61,7 +61,9 @@ class SandBox {
     }
 
     static function generateCode($code, $data) {
-        $data = json_decode($data, true);
+        if(!is_array($data)) {
+            $data = json_decode($data, true);
+        }
 
         ob_start();
         echo 'try {';

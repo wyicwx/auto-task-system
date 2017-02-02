@@ -1,5 +1,5 @@
 <div>
-    <?= $user['nickname']; ?>，你好！<br />
+    <?= $user['nickname']; ?>，您好！<br />
     <table>
         <thead>
             <tr>

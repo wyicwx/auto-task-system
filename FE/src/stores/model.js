@@ -1,7 +1,7 @@
 'use strict';
 
-import lodash from 'lodash';
-import {get, post} from '../helper/api.js';
+import { pick } from 'lodash';
+import { get, post } from '../helper/api.js';
 
 module.exports = {
     state: {
@@ -118,6 +118,16 @@ module.exports = {
             var data = _.pick(params, keys);
 
             return post('/model/checksyntax', data);
+        },
+        'model.debug.run': function(context, params) {
+            var keys = [
+                'model',
+                'data'
+            ];
+
+            var data = pick(params, keys);
+
+            return post('/model/debug', data);
         }
     }
 };

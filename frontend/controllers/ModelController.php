@@ -5,6 +5,7 @@ use yii;
 use frontend\components\BaseController;
 use common\models\TaskModel;
 use common\models\TaskModelForm;
+use common\models\TaskForm;
 use yii\data\Pagination;
 use common\models\User;
 use common\components\SandBox;
@@ -177,11 +178,50 @@ class ModelController extends BaseController {
         if(Yii::$app->request->isPost) {
             $code = Yii::$app->request->post('code');
 
+            if(!$code) {
+                return $this->renderAjaxError(3, '请填写代码！');
+            }
+
             if(SandBox::checkSyntax($code)) {
                 return $this->renderAjaxError(4);
             } else {
                 return $this->renderAjax();
             }
+        } else {
+            return $this->renderAjaxError();
+        }
+    }
+
+    public function actionDebug() {
+        if(Yii::$app->request->isPost) {
+            $model = Yii::$app->request->post('model');
+            $data = Yii::$app->request->post('data');
+
+            $modelForm = new TaskModelForm();
+            $modelForm->load($model, '');
+
+            if(!$modelForm->validate()) {
+                return $this->renderAjaxFormError($modelForm);
+            }
+
+            $task = [
+                'data' => $data,
+                'frequency' => 1
+            ];
+
+            $taskForm = new TaskForm();
+            $taskForm->load($task, '');
+
+            if(!$taskForm->validate()) {
+                return $this->renderAjaxFormError($taskForm);
+            }
+
+            $code = SandBox::generateCode($model['code'], $data);
+            $result = SandBox::execute($code);
+
+            return $this->renderAjax($result);
+        } else {
+            return $this->renderAjaxError();
         }
     }
 }

@@ -30,7 +30,14 @@
                     提供 <a href="https://github.com/rmccue/Requests" target="_blank">Requests</a> 对象，发起http请求，<a href="http://requests.ryanmccue.info/api/class-Requests.html">文档地址</a>
                 </li>
                 <li>
-                    数据类型可以直接作为变量使用，如定义了名为cookie的数据类型，可直接在代码中使用 $cookie
+                    数据类型直接作为变量使用，如定义了名为cookie的数据类型，可直接在代码中使用 $cookie
+                </li>
+                <li>
+                    需返回任务执行结果
+                    return [
+                        "code" => 0,
+                        "msg" => "成功"
+                    ]，当code非0时，需返回msg为报错信息
                 </li>
             </ol>
 
@@ -54,9 +61,31 @@
             </el-row>
         </el-form-item>
 
+        <el-form-item label="启用调试">
+            <el-switch
+              v-model="debug"
+              on-color="#13ce66"
+              off-color="">
+            </el-switch>
+        </el-form-item>
+        <el-form-item v-if="debug" label="调试数据">
+            <el-row>
+                <el-col :span="12">
+                    <el-input class="mb10" placeholder="请输入数据" v-model="debugData[item.name]" v-for="(item, index) in model.datatype">
+                        <template slot="prepend">{{item.name}}</template>
+                    </el-input>
+                </el-col>
+            </el-row>
+        </el-form-item>
+
+        <el-form-item v-if="debug" label="调试结果">
+            {{debugResult || '无'}}
+        </el-form-item>
+
         <el-form-item>
-            <el-button type="success" @click="save">保存</el-button>
+            <el-button v-if="debug" type="" @click="run">调试执行</el-button>
             <el-button type="info" @click="checkSyntax">语法检查</el-button>
+            <el-button type="success" @click="save">保存</el-button>
         </el-form-item>
     </el-form>
 </div>
@@ -77,7 +106,14 @@ module.exports = {
     },
     data() {
         return {
-            type: 'new'
+            // 页面类型
+            type: 'new',
+            // 调试开关
+            debug: false,
+            // 调试数据
+            debugData: {},
+            // 调试结果
+            debugResult: ''
         }
     },
     computed: {
@@ -119,8 +155,21 @@ module.exports = {
             }
         },
         checkSyntax() {
-            this.$store.dispatch('model.code.checksyntax', {
+            return this.$store.dispatch('model.code.checksyntax', {
                 code: this.model.code
+            });
+        },
+        // 调试执行
+        run() {
+            this.debugResult = '执行中...';
+
+            this.$store.dispatch('model.debug.run', {
+                model: this.model,
+                data: this.debugData
+            }).then((data) => {
+                this.debugResult = `返回代码：${data.code}, 返回信息：${data.msg}`;
+            }, () => {
+                this.debugResult = '执行失败';
             });
         }
     }
