@@ -198,8 +198,10 @@ class ModelController extends BaseController {
                 return $this->renderAjaxError(3, '请填写代码！');
             }
 
-            if(SandBox::checkSyntax($code)) {
-                return $this->renderAjaxError(4);
+            $error = SandBox::checkSyntax($code);
+
+            if($error) {
+                return $this->renderAjaxError(4, $error);
             } else {
                 return $this->renderAjax();
             }

@@ -9,7 +9,8 @@ class SandBox {
     const WHITE_LIST_FUNC = [
         'rand',
         'json_decode',
-        'json_encode'
+        'json_encode',
+        'preg_match'
     ];
 
     static function getSandBox() {
@@ -36,6 +37,7 @@ class SandBox {
             if($error->getMessage() == 'Could not parse sandboxed code!') {
                 return '语法错误！';
             }
+
             return $error->getMessage();
         }
     }
