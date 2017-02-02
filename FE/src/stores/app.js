@@ -12,7 +12,8 @@ module.exports = {
         taskList: require('./task_list.js'),
         modelList: require('./model_list.js'),
         model: require('./model.js'),
-        statisticsTaskList: require('./statistics_task_list.js')
+        statisticsTaskList: require('./statistics_task_list.js'),
+        admin: require('./admin.js')
     },
     actions: {
         'logout': function() {

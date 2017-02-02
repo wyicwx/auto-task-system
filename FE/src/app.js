@@ -30,7 +30,11 @@ const router = new VueRouter({
         { path: '/statistics/task/:tid', component: require('./components/statistics_task.vue')},
         { path: '/statistics/task', component: require('./components/statistics_task.vue')},
         { path: '/statistics/model', component: require('./components/statistics_model.vue')},
-        { path: '*', redirect: '/task/list'}
+        // 系统管理
+        { path: '/admin/adduser', component: require('./components/admin/adduser.vue')},
+        { path: '/admin/resetpassword', component: require('./components/admin/resetpassword.vue')},
+        { path: '/admin/syslog', component: require('./components/admin/syslog.vue')},
+        { path: '*', redirect: '/task/list'},
     ]
 });
 
