@@ -13,12 +13,13 @@ class TaskController extends Controller {
     // 根据当前时间获取可用频率范围
     private function getFrequencyByHour() {
         $hour = intval(date('H'));
+
         $frequency = Task::FREQUENCY;
         $result = [];
 
         foreach ($frequency as $times) {
             if($hour % $times == 0) {
-                array_push($result, $times);
+                array_push($result, Task::FREQUENCY_INTERVAL[$times]);
             }
         }
 
@@ -27,6 +28,7 @@ class TaskController extends Controller {
     // 每小时执行一次，排出需要执行的任务
     public function actionSchedule() {
         $frequency = $this->getFrequencyByHour();
+
         $all = Task::find()
             ->where([
                 'status' => Task::STATUS_RUN,

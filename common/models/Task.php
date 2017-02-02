@@ -12,7 +12,18 @@ class Task extends ActiveRecord {
     const STATUS_RUN = 0;
     const STATUS_PAUSE = 1;
     const STATUS_DELETE = -1;
-    const FREQUENCY = [1, 2, 3, 4, 6, 12, 24];
+    const FREQUENCY = [1, 2, 3, 4, 6, 8, 12, 24]; // 频率
+    const FREQUENCY_INTERVAL = [
+        1 => 24,
+        2 => 12, 
+        3 => 8, 
+        4 => 6, 
+        6 => 4,
+        8 => 3,
+        12 => 2, 
+        24 => 1
+    ]; // 间隔
+
 
     public function behaviors()
     {

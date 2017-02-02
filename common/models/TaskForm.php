@@ -14,6 +14,7 @@ class TaskForm extends Model {
     public function rules() {
         return [
             [['frequency', 'data'], 'required'],
+            ['frequency', 'frequencyValidate'],
             ['data', 'dataValidate'],
             [['remark', 'id'], 'safe']
         ];
@@ -26,6 +27,15 @@ class TaskForm extends Model {
                     $this->addError($attribute, '运行数据'.$key.'为必填项！');
                     return false;
                 }
+            }
+        }
+    }
+
+    public function frequencyValidate($attribute, $params) {
+        if(!$this->hasErrors()) {
+            if(!in_array($this->frequency, Task::FREQUENCY)) {
+                $this->addError($attribute, '执行次数非法！');
+                return false;
             }
         }
     }

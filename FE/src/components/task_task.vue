@@ -30,7 +30,8 @@
                         <el-option value="2">2</el-option>
                         <el-option value="3">3</el-option>
                         <el-option value="4">4</el-option>
-                        <el-option value="5">6</el-option>
+                        <el-option value="6">6</el-option>
+                        <el-option value="8">8</el-option>
                         <el-option value="12">12</el-option>
                         <el-option value="24">24</el-option>
                     </el-select>
