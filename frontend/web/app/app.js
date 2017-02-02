@@ -43012,7 +43012,17 @@
 	    },
 	    methods: {
 	        logout: function logout() {
-	            debugger;
+	            var this$1 = this;
+
+	            this.$confirm('确定退出?', '提示', {
+	                confirmButtonText: '确定',
+	                cancelButtonText: '取消',
+	                type: 'warning'
+	            }).then(function () {
+	                this$1.$store.dispatch('logout');
+	            }).then(function () {
+	                location.reload();
+	            }).catch(function () {});
 	        },
 	        calcMinHeight: function calcMinHeight() {
 	            this.minHeight = window.innerHeight;
@@ -43168,7 +43178,7 @@
 	    },
 	    actions: {
 	        'logout': function logout() {
-	            return (0, _api.post)('/');
+	            return (0, _api.post)('/site/logout');
 	        }
 	    }
 	};

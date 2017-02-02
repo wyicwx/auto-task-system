@@ -17,7 +17,7 @@ module.exports = {
     },
     actions: {
         'logout': function() {
-            return post('/');
+            return post('/site/logout');
         }
     }
 };

@@ -88,7 +88,15 @@ module.exports = {
     },
     methods: {
         logout() {
-            debugger;
+            this.$confirm('确定退出?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.$store.dispatch('logout');
+            }).then(() => {
+                location.reload();
+            }).catch(() => {});
         },
         calcMinHeight() {
             this.minHeight = window.innerHeight;

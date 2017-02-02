@@ -88,6 +88,15 @@ var server = new WebpackDevServer(compiler, {
                 Cookie: cookie
             },
             secure: false  
+        },
+        '/site/*': {
+            target: 'http://task.weixin.com',
+            headers: {
+                Host: 'task.weixin.com',
+                Referer: 'http://task.weixin.com',
+                Cookie: cookie
+            },
+            secure: false  
         }
     }
 });
