@@ -5,7 +5,6 @@
             <!-- <el-menu-item index="/dashboard">
                 <i class="el-icon-menu"></i>控制台
             </el-menu-item> -->
-
             <el-submenu index="/task">
                 <template slot="title"><i class="el-icon-date"></i>控制台</template>
                 <el-menu-item index="/task/list">

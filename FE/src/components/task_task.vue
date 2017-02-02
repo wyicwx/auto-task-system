@@ -11,14 +11,14 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="模板名称">
-                        <el-input v-model="model.name" disabled></el-input>
+                        <el-input v-model="model.name" readonly></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="18">
                     <el-form-item label="描述">
-                        <el-input type="textarea" autosize v-model="model.description" disabled></el-input>
+                        <el-input type="textarea" autosize v-model="model.description" readonly></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>

@@ -242,4 +242,8 @@ class ModelController extends BaseController {
             return $this->renderAjaxError();
         }
     }
+
+    public function actionSandboxenablefunc() {
+        return $this->renderAjax(SandBox::WHITE_LIST_FUNC);
+    }
 }

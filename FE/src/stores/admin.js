@@ -7,13 +7,21 @@ module.exports = {
     state: {
         logCrontab: {
             list: [],
-            pages: {}
+            pages: {},
+            loading: false
         }
     },
     mutations: {
         'admin.setLogCrontab': function(state, data) {
             state.logCrontab.list = data.list;
-            state.logCrontab.pages = data.pages
+            state.logCrontab.pages = data.pages;
+            state.logCrontab.loading = false;
+        },
+        'admin.logCrontab.loading': function(state, data) {
+            state.logCrontab.loading = true;
+        },
+        'admin.logCrontab.loading.false': function(state, data) {
+            state.logCrontab.loading = false;
         }
     },
     actions: {
@@ -42,10 +50,13 @@ module.exports = {
             ];
 
             var data = pick(params, keys);
+            context.commit('admin.logCrontab.loading');
 
             return get('/admin/logcrontab', data).then((data) => {
                 context.commit('admin.setLogCrontab', data);
                 return data;
+            }, () => {
+                context.commit('admin.logCrontab.loading.false');
             });
         }
     }

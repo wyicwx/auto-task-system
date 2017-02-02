@@ -1,6 +1,6 @@
 <template>
 <div v-loading="model.loading" style="height: 100%;">
-    <div v-if="!model.loading">
+    <div v-show="!model.loading">
         <el-breadcrumb separator="/" class="mb20">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item :to="{ path: '/model/list'}">我的模板</el-breadcrumb-item>
@@ -25,9 +25,6 @@
             <el-form-item label="代码">
                 <ol class="w_alert_warning" style="padding-left: 35px;">
                     <li>
-                        允许使用函数：json_encode、json_decode、rand
-                    </li>
-                    <li>
                         提供 <a href="https://github.com/rmccue/Requests" target="_blank">Requests</a> 对象，发起http请求，<a href="http://requests.ryanmccue.info/api/class-Requests.html" target="_blank">文档地址</a>
                     </li>
                     <li>
@@ -39,6 +36,9 @@
                             "code" => 0,
                             "msg" => "成功"
                         ]，当code非0时，需返回msg为报错信息
+                    </li>
+                    <li>
+                        允许使用函数：{{enableCodeFunc.join('、')}}
                     </li>
                 </ol>
 
@@ -121,10 +121,14 @@ module.exports = {
     computed: {
         model() {
             return this.$store.state.model;
+        },
+        enableCodeFunc() {
+            return this.$store.state.enableCodeFunc;
         }
     },
     created() {
         this.$store.commit('model.reset');
+        this.$store.dispatch('enableCodeFuncFetch');
     },
     mounted() {
         this.init();
