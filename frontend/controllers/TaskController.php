@@ -35,7 +35,8 @@ class TaskController extends BaseController {
     public function actionList() {
         $list = Task::find()
                     ->where(['uid' => Yii::$app->user->id])
-                    ->andWhere(['!=', 'status', Task::STATUS_DELETE]);
+                    ->andWhere(['!=', 'status', Task::STATUS_DELETE])
+                    ->orderBy('update_time desc');
 
         $pages = new Pagination(['totalCount' => $list->count()]);
 

@@ -108,7 +108,8 @@ class ModelController extends BaseController {
         } else {
             $listAR = $listAR->where([
                 'uid' => Yii::$app->user->id
-            ])->andWhere(['!=', 'status', TaskModel::STATUS_DELETE]);
+            ])->andWhere(['!=', 'status', TaskModel::STATUS_DELETE])
+            ->orderBy('update_time desc');
         }
 
         $pages = new Pagination(['totalCount' => $listAR->count()]);

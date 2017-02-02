@@ -115,7 +115,7 @@ module.exports = {
                 this.$store.dispatch('task.create', _.extend({
                     mid: this.model.id
                 }, this.task)).then(({id}) => {
-                    this.$router.push(`/task/task/${id}`);
+                    this.$router.push(`/task/list`);
                 });
             }
         }

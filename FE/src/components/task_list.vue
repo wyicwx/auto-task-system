@@ -158,8 +158,14 @@ module.exports = {
             });
         },
         runNow(id) {
-            this.$store.dispatch('task.runOne', {
-                id
+            this.$confirm('是否执行一次该任务?单次执行不会影响原有任务计划', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                return this.$store.dispatch('task.runOne', {
+                    id
+                });
             }).then((data) => {
                  this.$alert(`返回代码: ${data.code}，返回数据：${data.msg}`, '运行结果', {
                     confirmButtonText: '确定'
