@@ -33,6 +33,7 @@ module.exports = {
             state.description = data.description;
             state.datatype = JSON.parse(data.datatype);
             state.user = data.user;
+            state.loading = false;
         },
         'model.reset': function(state) {
             state.id = '';
@@ -46,16 +47,23 @@ module.exports = {
             state.user = {};
             state.loading = false;
         },
-        'model.saving': function(state) {
-            state.saving = true;
+        'model.loading': function(state) {
+            state.loading = true;
+        },
+        'model.loading.false': function(state) {
+            state.loading = false;
         }
     },
     actions: {
         'model.fetch': function(context, params = {}) {
+            context.commit('model.loading');
+
             return get('/model/view', {
                 id: params.id
-            }).then((data) => {
+            }, false, false, false).then((data) => {
                 context.commit('model.setModel', data);
+            }).then(() => {
+                context.commit('model.loading.false');
             });
         },
         'model.create': function(context, params) {

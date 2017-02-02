@@ -9,6 +9,7 @@ use common\models\TaskForm;
 use yii\data\Pagination;
 use common\models\User;
 use common\components\SandBox;
+use common\models\Times;
 
 class ModelController extends BaseController {
     public function actionCreate() {
@@ -97,11 +98,13 @@ class ModelController extends BaseController {
 
         $listAR = TaskModel::find();
 
-        if($isMarket) {   
+        if($isMarket) {
             $listAR = $listAR->where([
                 'status' => TaskModel::STATUS_PUBLIC
             ])
-            ->with('user');
+            ->joinWith('times')
+            ->with('user')
+            ->orderBy(Times::tableName().'.ratio desc');
         } else {
             $listAR = $listAR->where([
                 'uid' => Yii::$app->user->id
@@ -114,6 +117,18 @@ class ModelController extends BaseController {
                     ->offset($pages->offset)
                     ->asArray()
                     ->all();
+
+        if($isMarket) {
+            foreach ($list as &$item) {
+                if(!$item['times']) {
+                    $item['times'] = [
+                        'positive' => '0',
+                        'negative' => '0',
+                        'ratio' => '0',
+                    ];
+                }
+            }
+        }
 
         return $this->renderAjaxList($list, $pages);
     }

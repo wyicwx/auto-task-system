@@ -8,17 +8,22 @@ module.exports = {
         id: '',
         nickname: '',
         email: '',
-        role: 0
+        role: 0,
+        loading: false
     },
     actions: {
         'user.load': function(context, params) {
             context.commit('user.setProfile', window.taskUser);
         },
         'user.profile': function(context, params) {
-            return get('/user/profile').then((data) => {
+            context.commit('user.loading');
+
+            return get('/user/profile', {}, false, false, false).then((data) => {
                 context.commit('user.setProfile', data);
 
                 return data;
+            }, () => {
+                context.commit('user.loading.false');
             });
         },
         'user.updateProfile': function(context, params) {
@@ -53,6 +58,13 @@ module.exports = {
             state.email = data.email;
             state.role = data.role;
             state.avatar = data.avatar;
+            state.loading = false;
+        },
+        'user.loading': function(state) {
+            state.loading = true;
+        },
+        'user.loading.false': function(state) {
+            state.loading = false;
         }
     }
 };

@@ -47,7 +47,7 @@ module.exports = {
 
             get('/task/list', {
                 page: params.page || 1
-            }).then((data) => {
+            }, false, false, false).then((data) => {
                 context.commit('task.list.success', data);
             }, () => {
                 context.commit('task.list.fail');

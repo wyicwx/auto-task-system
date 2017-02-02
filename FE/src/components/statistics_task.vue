@@ -1,44 +1,46 @@
 <template>
-<div>
-    <el-breadcrumb separator="/" class="mb20">
-        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>数据统计</el-breadcrumb-item>
-        <el-breadcrumb-item>任务状况</el-breadcrumb-item>
-    </el-breadcrumb>
-    <el-table v-loading.body="list.loading" :data="list.list" style="width: 100%">
-        <el-table-column prop="update_time" label="执行时间" width="180"></el-table-column>
-        <el-table-column align="center" label="执行状态" width="100">
-            <template scope="scope">
-                <el-tag :close-transition="true" type="success" v-if="scope.row.status == 0">成功</el-tag>
-                <el-tag :close-transition="true" type="danger" v-if="scope.row.status == 1">失败</el-tag>
-                <el-tag :close-transition="true" type="gray" v-if="scope.row.status == 2">未执行</el-tag>
-                <el-tag :close-transition="true" v-if="scope.row.status == 3">终止</el-tag>
-            </template>
-        </el-table-column>
-        <el-table-column label="代码模板">
-            <template scope="scope">
-                <router-link :to="'/model/view/'+scope.row.model.id" target="_blank">{{scope.row.model.name}}</router-link>
-            </template>
-        </el-table-column>
-        <el-table-column align="center" label="执行结果" width="100">
-            <template scope="scope">
-                <a href="javascript:void(0)" v-if="scope.row.status == 1" @click="showDetail(scope.row.result)">查看详情</a>
-            </template>
-        </el-table-column>
-        <el-table-column label="操作" width="100">
-            <template scope="scope">无</template>
-        </el-table-column>
-    </el-table>
-    <el-pagination
-        v-show="list.pages.pageCount > 1"
-        layout="prev, pager, next"
-        :page-size="list.pages.perpage"
-        :page-count="list.pages.pageCount"
-        :current-page="list.pages.page"
-        :total="list.pages.totalCount"
-        @current-change="goPage"
-    >
-    </el-pagination>
+<div v-loading="list.loading" style="height: 100%">
+    <div v-if="!list.loading">    
+        <el-breadcrumb separator="/" class="mb20">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>数据统计</el-breadcrumb-item>
+            <el-breadcrumb-item>任务状况</el-breadcrumb-item>
+        </el-breadcrumb>
+        <el-table :data="list.list" style="width: 100%">
+            <el-table-column prop="update_time" label="执行时间" width="180"></el-table-column>
+            <el-table-column align="center" label="执行状态" width="100">
+                <template scope="scope">
+                    <el-tag :close-transition="true" type="success" v-if="scope.row.status == 0">成功</el-tag>
+                    <el-tag :close-transition="true" type="danger" v-if="scope.row.status == 1">失败</el-tag>
+                    <el-tag :close-transition="true" type="gray" v-if="scope.row.status == 2">未执行</el-tag>
+                    <el-tag :close-transition="true" v-if="scope.row.status == 3">终止</el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column label="代码模板">
+                <template scope="scope">
+                    <router-link :to="'/model/view/'+scope.row.model.id" target="_blank">{{scope.row.model.name}}</router-link>
+                </template>
+            </el-table-column>
+            <el-table-column align="center" label="执行结果" width="100">
+                <template scope="scope">
+                    <a href="javascript:void(0)" v-if="scope.row.status == 1" @click="showDetail(scope.row.result)">查看详情</a>
+                </template>
+            </el-table-column>
+            <el-table-column label="操作" width="100">
+                <template scope="scope">无</template>
+            </el-table-column>
+        </el-table>
+        <el-pagination
+            v-show="list.pages.pageCount > 1"
+            layout="prev, pager, next"
+            :page-size="list.pages.perpage"
+            :page-count="list.pages.pageCount"
+            :current-page="list.pages.page"
+            :total="list.pages.totalCount"
+            @current-change="goPage"
+        >
+        </el-pagination>
+    </div>
 </div>
 </template>
 

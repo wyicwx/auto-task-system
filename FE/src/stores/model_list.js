@@ -42,7 +42,7 @@ module.exports = {
 
             get('/model/list', {
                 page: params.page || 1
-            }).then((data) => {
+            }, false, false, false).then((data) => {
                 context.commit('model.list.success', data);
             }, () => {
                 context.commit('model.list.fail');
@@ -54,7 +54,7 @@ module.exports = {
             get('/model/list', {
                 page: params.page || 1,
                 market: 1
-            }).then((data) => {
+            }, false, false, false).then((data) => {
                 context.commit('model.list.success', data);
             }, () => {
                 context.commit('model.list.fail');

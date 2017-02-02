@@ -8,7 +8,8 @@ module.exports = {
         'id': '',
         'frequency': 1,
         'data': {},
-        'remark': ''
+        'remark': '',
+        'loading': false
     },
     mutations: {
         'task.set': function(state, data) {
@@ -16,6 +17,20 @@ module.exports = {
             state.frequency = data.frequency;
             state.data = JSON.parse(data.data);
             state.remark = data.remark;
+            state.loading = false;
+        },
+        'task.reset': function(state) {
+            state.id = '',
+            state.frequency = 1;
+            state.data = {};
+            state.remark = '';
+            state.loading = false;
+        },
+        'task.loading': function(state) {
+            state.loading = true
+        },
+        'task.loading.false': function(state) {
+            state.loading = false;
         }
     },
     actions: {
@@ -49,10 +64,12 @@ module.exports = {
             ];
 
             var data = pick(params, keys);
-
-            return get('/task/view', data).then((data) => {
+            context.commit('task.loading');
+            return get('/task/view', data, false, false, false).then((data) => {
                 context.commit('task.set', data);
                 return data;
+            }, () => {
+                context.commit('task.loading.false');
             });
         },
         'task.delete': function(context, params = {}) {

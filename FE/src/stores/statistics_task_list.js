@@ -32,7 +32,7 @@ module.exports = {
 
             context.commit('statistics.task.list.loading');
 
-            return get('/schedule/list', data).then((data) => {
+            return get('/schedule/list', data, false, false, false).then((data) => {
                 context.commit('statistics.task.list.success', data);
 
                 return data;

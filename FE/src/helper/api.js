@@ -30,7 +30,7 @@ function parseForm(body) {
 }
 
 module.exports = {
-    get: function(url, body = {}, headers, globMessage = false) {
+    get: function(url, body = {}, headers = {}, globMessage = false, loading = true) {
         body[csrfParam] = csrf;
 
         if(url.indexOf('?') === -1) {
@@ -38,7 +38,9 @@ module.exports = {
         }
 
         url += parseBody(body);
-        emitter.emit('fetch.start');
+        if(loading) {
+            emitter.emit('fetch.start');
+        }
 
         return fetch(url, {
             method: 'get',
@@ -54,7 +56,9 @@ module.exports = {
             }
         }).then((data) => {
             if(data.code === 0) {
-                emitter.emit('fetch.end');
+                if(loading) {
+                    emitter.emit('fetch.end');
+                }
 
                 if(globMessage) {
                     Message.success({
@@ -69,7 +73,9 @@ module.exports = {
                 return Promise.reject(data);
             }
         }).catch((data) => {
-            emitter.emit('fetch.end');
+            if(loading) {
+                emitter.emit('fetch.end');
+            }
 
             if(data && data.msg) {
                 Message.error({
@@ -88,11 +94,13 @@ module.exports = {
             return Promise.reject(data);
         });
     },
-    post: function(url, body = {}, headers = {}, globMessage = true) {
+    post: function(url, body = {}, headers = {}, globMessage = true, loading = true) {
         body[csrfParam] = csrf;
 
         headers['Content-Type'] = 'application/json';
-        emitter.emit('fetch.start');
+        if(loading) {
+            emitter.emit('fetch.start');
+        }
 
         return fetch(url, {
             method: 'post',
@@ -109,7 +117,9 @@ module.exports = {
             }
         }).then((data) => {
             if(data.code === 0) {
-                emitter.emit('fetch.end');
+                if(loading) {
+                    emitter.emit('fetch.end');
+                }
 
                 if(globMessage) {
                     Message.success({
@@ -124,7 +134,10 @@ module.exports = {
                 return Promise.reject(data);
             }
         }).catch((data) => {
-            emitter.emit('fetch.end');
+            if(loading) {
+                emitter.emit('fetch.end');
+            }
+
             if(globMessage) {
                 if(data && data.msg) {
                     var msg = [];

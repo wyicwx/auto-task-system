@@ -66,8 +66,8 @@
         </el-menu>
     </div>
     <div class="main" :style="{minHeight: minHeight + 'px'}">
-        <el-row>
-            <el-col :span="24">
+        <el-row style="height: 100%;">
+            <el-col :span="24" style="height: 100%;">
                 <router-view></router-view>
             </el-col>
         </el-row>
