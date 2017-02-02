@@ -6,6 +6,9 @@ import 'normalize.css';
 import 'element-ui/lib/theme-default/index.css';
 import './less/app.less';
 import App from './components/app.vue';
+import { EventEmitter } from 'fbemitter';
+
+EventEmitter.emitter = new EventEmitter();
 
 Vue.use(Vuex);
 Vue.use(VueRouter);

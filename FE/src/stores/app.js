@@ -4,7 +4,7 @@ import { post } from '../helper/api.js';
 
 module.exports = {
     state: {
-
+        fetchLoading: false
     },
     modules: {
         user: require('./user.js'),

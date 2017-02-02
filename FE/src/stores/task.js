@@ -86,6 +86,15 @@ module.exports = {
             return post('/task/resume', data).then(() => {
                 context.commit('task.list.resume', data.id);
             });
+        },
+        'task.runOne': function(context, params = {}) {
+            var keys = [
+                'id'
+            ];
+
+            var data = pick(params, keys);
+
+            return post('/task/runone', data);
         }
     }
 };

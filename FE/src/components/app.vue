@@ -72,6 +72,9 @@
             </el-col>
         </el-row>
     </div>
+    <div class="fetch_loading" v-if="fetchLoading">
+        <i class="el-icon-loading"></i>
+    </div>
 </div>
     
 </template>
@@ -79,11 +82,14 @@
 <script type="text/javascript">
 'use strict';
 
+var { EventEmitter } = require('fbemitter');
+
 module.exports = {
     data() {
         return {
             minHeight: 0,
-            user: this.$store.state.user
+            user: this.$store.state.user,
+            fetchLoading: this.$store.state.fetchLoading
         }
     },
     methods: {
@@ -105,6 +111,14 @@ module.exports = {
 
         window.addEventListener('resize', () => {
             this.calcMinHeight();
+        });
+
+        EventEmitter.emitter.addListener('fetch.start', () => {
+            this.fetchLoading = true;
+        });
+
+        EventEmitter.emitter.addListener('fetch.end', () => {
+            this.fetchLoading = false;
         });
     }
 };

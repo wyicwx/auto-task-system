@@ -11,6 +11,7 @@ class SandBox {
         'json_decode',
         'json_encode'
     ];
+
     static function getSandBox() {
         $sandbox = new PHPSandbox();
         $sandbox->setValidationErrorHandler(function($error) {
@@ -56,6 +57,25 @@ class SandBox {
         }
 
         ob_end_clean();
+
+        if(!is_array($result)) {
+            $result = [
+                'code' => -3,
+                'msg' => '无返回结果！'
+            ];
+        } else {
+            if(!array_key_exists('code', $result)) {
+                $result = [
+                    'code' => -3,
+                    'msg' => '无返回结果！'
+                ];
+            }
+
+            if(!array_key_exists('msg', $result)) {
+                $result['msg'] = '';
+            }
+        }
+
 
         return $result;
     }

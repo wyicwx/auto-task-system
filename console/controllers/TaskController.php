@@ -67,22 +67,11 @@ class TaskController extends Controller {
             $taskCode = SandBox::generateCode($code, $task->data);
             $result = SandBox::execute($taskCode);
 
-            $correct = false;
-            $msg = '';
-
-            if(!is_array($result)) {
-                if($result) {
-                    $correct = true; 
-                }
+            if($result['code'] == 0) {
+                $correct = true;
             } else {
-                if(array_key_exists('code', $result)) {
-                    if($result['code'] == 0) {
-                        $correct = true;
-                    }
-                }
-                if(array_key_exists('msg', $result)) {
-                    $msg = $result['msg'];
-                }
+                $correct = false;
+                $msg = $result['msg'];
             }
 
             if(!$correct) {

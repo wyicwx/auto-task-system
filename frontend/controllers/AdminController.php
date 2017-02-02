@@ -81,9 +81,10 @@ class AdminController extends BaseController {
 
         $pages = new Pagination(['totalCount' => $listAR->count()]);
 
-        $list = $listAR->limit($pages->limit)
+        $list = $listAR->limit(50)
                     ->offset($pages->offset)
                     ->asArray()
+                    ->orderBy('created_time desc')
                     ->all();
 
         return $this->renderAjaxList($list, $pages);

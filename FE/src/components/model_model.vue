@@ -27,7 +27,7 @@
                     允许使用函数：json_encode、json_decode、rand
                 </li>
                 <li>
-                    提供 <a href="https://github.com/rmccue/Requests" target="_blank">Requests</a> 对象，发起http请求，<a href="http://requests.ryanmccue.info/api/class-Requests.html">文档地址</a>
+                    提供 <a href="https://github.com/rmccue/Requests" target="_blank">Requests</a> 对象，发起http请求，<a href="http://requests.ryanmccue.info/api/class-Requests.html" target="_blank">文档地址</a>
                 </li>
                 <li>
                     数据类型直接作为变量使用，如定义了名为cookie的数据类型，可直接在代码中使用 $cookie

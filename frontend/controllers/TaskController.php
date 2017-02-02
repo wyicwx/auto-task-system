@@ -7,6 +7,8 @@ use common\models\TaskModel;
 use common\models\TaskForm;
 use common\models\Task;
 use yii\data\Pagination;
+use common\components\SandBox;
+use common\models\Schedule;
 
 class TaskController extends BaseController {
     public function actionCreate() {
@@ -160,6 +162,43 @@ class TaskController extends BaseController {
 
         if($task) {
             return $this->renderAjax($task);
+        } else {
+            return $this->renderAjaxError();
+        }
+    }
+    // 单次一次
+    public function actionRunone() {
+        if(Yii::$app->request->isPost) {
+            $id = Yii::$app->request->post('id');
+
+            if(!$id) {
+                return $this->renderAjaxError(5);
+            }
+
+            $task = Task::find()
+                ->where([
+                    'uid' => Yii::$app->user->id,
+                    'id' => $id
+                ])
+                ->with('model')
+                ->one();
+
+            if(!$task) {
+                return $this->renderAjaxError(3, '找不到id为'.$id.'的任务！');
+            }
+
+            $taskCode = SandBox::generateCode($task->model->code, $task->data);
+            $result = SandBox::execute($taskCode);
+
+            $schedule = new Schedule();
+            $schedule->uid = $task['uid'];
+            $schedule->tid = $task['id'];
+            $schedule->mid = $task['mid'];
+            $schedule->status = $result['code'] == 0 ? Schedule::STATUS_SUCCESS : Schedule::STATUS_FAIL;
+            $schedule->result = $result['msg'];
+            $schedule->save();
+
+            return $this->renderAjax($result);
         } else {
             return $this->renderAjaxError();
         }

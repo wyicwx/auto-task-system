@@ -18,8 +18,8 @@
             </template>
         </el-table-column>
         <el-table-column prop="remark" :formatter="retainFormatter" label="备注"></el-table-column>
-        <el-table-column align="center" prop="times" :formatter="retainFormatter" label="运行次数" width="100"></el-table-column>
-        <el-table-column label="操作" width="210">
+        <!-- <el-table-column align="center" prop="times" :formatter="retainFormatter" label="运行次数" width="100"></el-table-column> -->
+        <el-table-column label="操作" width="260">
             <template scope="scope">
                 <el-button
                   v-if="scope.row.status == 0"
@@ -56,7 +56,14 @@
                   type="text"
                   size="small">
                   运行状态
-                </el-button>            
+                </el-button>
+
+                <el-button
+                  @click.native.prevent="runNow(scope.row.id)"
+                  type="text"
+                  size="small">
+                  单次运行
+                </el-button>
           </template>
         </el-table-column>
     </el-table>
@@ -145,6 +152,15 @@ module.exports = {
             }).then(() => {
                 return this.$store.dispatch('task.resume', {
                     id
+                });
+            });
+        },
+        runNow(id) {
+            this.$store.dispatch('task.runOne', {
+                id
+            }).then((data) => {
+                 this.$alert(`返回代码: ${data.code}，返回数据：${data.msg}`, '运行结果', {
+                    confirmButtonText: '确定'
                 });
             });
         }
