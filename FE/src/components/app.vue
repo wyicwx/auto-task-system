@@ -93,9 +93,7 @@ module.exports = {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.$store.dispatch('logout');
-            }).then(() => {
-                location.reload();
+                location.href = '/site/logout';
             }).catch(() => {});
         },
         calcMinHeight() {
