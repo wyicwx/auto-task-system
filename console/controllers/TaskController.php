@@ -142,7 +142,7 @@ class TaskController extends Controller {
         foreach ($info as $item) {
             $result = Yii::$app->mailer->compose('test', $item)
                 ->setFrom(['task_auto@163.com' => '自动任务系统'])
-                ->setTo('236008243@qq.com')
+                ->setTo($item['user']['email'])
                 ->setSubject('失败任务汇总')
                 ->send();
 

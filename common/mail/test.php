@@ -22,7 +22,7 @@
                     <?= \yii\helpers\Html::encode($item['result']); ?>
                 </td>
                 <td>
-                    <a href="<?= Yii::$app->urlManager->createAbsoluteUrl(['/task/update', 'id' => $item['tid']]); ?>">修改任务</a>
+                    <a href="<?= Yii::$app->urlManager->baseUrl.'#/task/update/'.$item['tid']; ?>" target="_blank">修改任务</a>
                 </td>
             </tr>
             <?php } ?>

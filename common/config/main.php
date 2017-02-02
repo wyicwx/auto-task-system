@@ -26,6 +26,10 @@ return [
             //     'encryption' => 'tls',
             // ],
         ],
+        'urlManager' => [
+            'scriptUrl' => 'http://task.hexcoo.com',
+            'baseUrl' => 'http://task.hexcoo.com'
+        ]
     ],
     'language' => 'zh-CN',
 ];
