@@ -14,6 +14,7 @@ class PasswordForm extends Model {
         return [
             [['password', 'newpassword', 'repassword'], 'required'],
             ['newpassword', 'string', 'min' => 6, 'message' => '密码至少6位！'],
+            ['newpassword', 'string', 'max' => 24,'message' => '密码至多24位！'],
             [['newpassword'], 'validateNewPassword'],
             ['password', 'validatePassword']
         ];
