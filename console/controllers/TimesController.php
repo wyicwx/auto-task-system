@@ -24,18 +24,17 @@ class TimesController extends Controller {
         foreach ($models as $model) {
             if(!$model->times) {
 
-                $schedules = Schedule::find()
+                $successTimes = Schedule::find()
                     ->where([
                         'mid' => $model->id,
-                    ]);
+                        'status' => Schedule::STATUS_SUCCESS
+                    ])->count();
 
-                $successTimes = $schedules->andWhere([
-                    'status' => Schedule::STATUS_SUCCESS
-                ])->count();
-
-                $failTimes = $schedules->andWhere([
-                    'status' => Schedule::STATUS_FAIL
-                ])->count();
+                $failTimes = Schedule::find()
+                    ->where([
+                        'mid' => $model->id,
+                        'status' => Schedule::STATUS_FAIL
+                    ])->count();
 
                 $times = new Times();
                 $times->type = Times::TYPE_MODEL;
@@ -48,28 +47,31 @@ class TimesController extends Controller {
                 } else if($times->negative <= 0) {
                     $times->ratio = 100;
                 } else {
-                    $times->ratio = $times->positive / $times->negative * 100;
+                    $ratio = $times->positive / ($times->positive + $times->negative) * 100;
+                    $times->ratio = number_format($ratio, 2, '.', '');
                 }
 
                 $times->save();
             } else {
                 $times = $model->times;
 
-                $schedules = Schedule::find()
+                $successTimes = Schedule::find()
                     ->where([
-                        'mid' => $model->id
+                        'mid' => $model->id,
+                        'status' => Schedule::STATUS_SUCCESS
                     ])
                     ->andWhere([
                         '>', 'update_time', $times->update_time
-                    ]);
+                    ])->count();
 
-                $successTimes = $schedules->andWhere([
-                    'status' => Schedule::STATUS_SUCCESS
-                ])->count();
-
-                $failTimes = $schedules->andWhere([
-                    'status' => Schedule::STATUS_FAIL
-                ])->count();
+                $failTimes = Schedule::find()
+                    ->where([
+                        'mid' => $model->id,
+                        'status' => Schedule::STATUS_FAIL
+                    ])
+                    ->andWhere([
+                        '>', 'update_time', $times->update_time
+                    ])->count();
 
                 $times->positive += $successTimes;
                 $times->negative += $failTimes;
@@ -79,8 +81,10 @@ class TimesController extends Controller {
                 } else if($times->negative <= 0) {
                     $times->ratio = 100;
                 } else {
-                    $times->ratio = $times->positive / $times->negative * 100;
+                    $ratio = $times->positive / ($times->positive + $times->negative) * 100;
+                    $times->ratio = number_format($ratio, 2, '.', '');
                 }
+
                 $times->save();
             }
         }

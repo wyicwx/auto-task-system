@@ -10,8 +10,8 @@ use common\models\Task;
 use common\models\User;
 
 class Schedule extends ActiveRecord {
-    const STATUS_FAIL = 1;
     const STATUS_SUCCESS = 0;
+    const STATUS_FAIL = 1;
     const STATUS_UNRUN = 2;
     const STATUS_TERMINATION = 3;
 

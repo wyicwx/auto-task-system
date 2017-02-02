@@ -71,6 +71,7 @@ class TaskController extends Controller {
 
             if($result['code'] == 0) {
                 $correct = true;
+                $msg = '';
             } else {
                 $correct = false;
                 $msg = $result['msg'];
