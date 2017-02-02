@@ -150,7 +150,7 @@ module.exports = {
                 this.$store.dispatch('model.update', this.model);
             } else {
                 this.$store.dispatch('model.create', this.model).then(({id}) => {
-                    this.$router.push(`/model/model/${id}`);
+                    this.$router.push(`/model/list`);
                 });
             }
         },

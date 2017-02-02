@@ -10,7 +10,7 @@ class Times extends ActiveRecord {
     const TYPE_TASK = 'task';
     const TYPE_MODEL = 'model';
 
-    public function tableName() {
+    public static function tableName() {
         return '{{%times}}';
     }
 
@@ -19,7 +19,7 @@ class Times extends ActiveRecord {
         return [
             [
                 'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'create_time',
+                'createdAtAttribute' => null,
                 'updatedAtAttribute' => 'update_time',
                 'value' => date('Y-m-d H:i:s')
             ]

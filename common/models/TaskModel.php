@@ -4,6 +4,7 @@ namespace common\models;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use common\models\User;
+use common\models\Times;
 
 class TaskModel extends ActiveRecord {
     const DATATYPE = ['string', 'number'];
@@ -34,6 +35,12 @@ class TaskModel extends ActiveRecord {
     public function getUser() {
         return $this->hasOne(User::className(), [
             'id' => 'uid'
+        ]);
+    }
+
+    public function getTimes() {
+        return $this->hasOne(Times::className(), [
+            'type_id' => 'id'
         ]);
     }
     /**
