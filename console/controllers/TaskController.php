@@ -74,7 +74,7 @@ class TaskController extends Controller {
                 $msg = '';
             } else {
                 $correct = false;
-                $msg = $result['msg'];
+                $msg = $result['msg'] ? $result['msg'] : '';
             }
 
             if(!$correct) {
@@ -86,10 +86,12 @@ class TaskController extends Controller {
             $schedule->save();
         }
 
-        $log = new LogCrontab();
-        $log->times = count($all);
-        $log->fail_times = $failTimes;
-        $log->save();
+        if(count($all) > 0) {
+            $log = new LogCrontab();
+            $log->times = count($all);
+            $log->fail_times = $failTimes;
+            $log->save();
+        }
     }
     // 邮件汇总通知，每日9，18点通知一次
     public function actionNotice($during) {
@@ -140,7 +142,7 @@ class TaskController extends Controller {
         }
 
         foreach ($info as $item) {
-            $result = Yii::$app->mailer->compose('test', $item)
+            $result = Yii::$app->mailer->compose('summary', $item)
                 ->setFrom(['task_auto@163.com' => '自动任务系统'])
                 ->setTo($item['user']['email'])
                 ->setSubject('失败任务汇总')
