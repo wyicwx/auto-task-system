@@ -1,6 +1,7 @@
 'use strict';
 
 import {get} from '../helper/api';
+import { each } from 'lodash';
 
 module.exports = {
     state: {
@@ -15,6 +16,11 @@ module.exports = {
     },
     mutations: {
         'model.list.success': function(state, data) {
+            each(data.list, (item) => {
+                if(!item.user) {
+                    item.user = {};
+                }
+            });
             state.loading = false;
             state.list = data.list;
             state.pages = data.pages;

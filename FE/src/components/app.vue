@@ -1,7 +1,7 @@
 <template>
 <div class="p_dashboard">
     <div class="sider">
-        <el-menu theme="dark" :router="true">
+        <el-menu theme="dark" :router="true" @item-click="iclick">
             <!-- <el-menu-item index="/dashboard">
                 <i class="el-icon-menu"></i>控制台
             </el-menu-item> -->
@@ -57,8 +57,8 @@
                 </el-menu-item>
             </el-submenu>
 
-            <el-menu-item index="" @click="logout">
-                <span href="javascript:void(0)" @click="logout">
+            <el-menu-item index="/logout">
+                <span>
                     <i class="el-icon-upload2"></i>退出
                 </span>
             </el-menu-item>
@@ -103,6 +103,11 @@ module.exports = {
         },
         calcMinHeight() {
             this.minHeight = window.innerHeight;
+        },
+        iclick(component) {
+            if(component.index == '/logout') {
+                this.logout();
+            }
         }
     },
     mounted() {
