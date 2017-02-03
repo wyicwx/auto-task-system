@@ -38,10 +38,15 @@ const router = new VueRouter({
         { path: '/admin/adduser', component: require('./components/admin/adduser.vue')},
         { path: '/admin/resetpassword', component: require('./components/admin/resetpassword.vue')},
         { path: '/admin/syslog', component: require('./components/admin/syslog.vue')},
+        { path: '/admin/allschedule', component: require('./components/admin/allschedule.vue')},
         { path: '*', redirect: '/task/list'},
     ]
 });
-
+console.log(router);
+var y = require('./components/statistics_model.vue');
+var x = require('./components/admin/allschedule.vue');
+console.log(y);
+console.log(x);
 const app = new Vue({
     store,
     router,

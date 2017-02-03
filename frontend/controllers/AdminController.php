@@ -8,6 +8,7 @@ use frontend\models\RegisterForm;
 use common\models\User;
 use common\models\LogCrontab;
 use yii\data\Pagination;
+use common\models\Schedule;
 
 class AdminController extends BaseController {
     public function init() {
@@ -86,6 +87,22 @@ class AdminController extends BaseController {
                     ->asArray()
                     ->orderBy('created_time desc')
                     ->all();
+
+        return $this->renderAjaxList($list, $pages);
+    }
+
+    public function actionAllschedule() {
+        $scheduleList = Schedule::find();
+
+        $pages = new Pagination(['totalCount' => $scheduleList->count()]);
+
+        $list = $scheduleList
+            ->with(['model', 'user'])
+            ->offset($pages->offset)
+            ->limit($pages->limit)
+            ->orderBy('update_time desc')
+            ->asArray()
+            ->all();
 
         return $this->renderAjaxList($list, $pages);
     }

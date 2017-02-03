@@ -9,6 +9,11 @@ module.exports = {
             list: [],
             pages: {},
             loading: false
+        },
+        allSchedule: {
+            list: [],
+            loading: false,
+            pages: {}
         }
     },
     mutations: {
@@ -22,6 +27,17 @@ module.exports = {
         },
         'admin.logCrontab.loading.false': function(state, data) {
             state.logCrontab.loading = false;
+        },
+        'admin.allSchedule.list.loading': function(state) {
+            state.allSchedule.loading = true;
+        },
+        'admin.allSchedule.list.success': function(state, data) {
+            state.allSchedule.list = data.list;
+            state.allSchedule.pages = data.pages;
+            state.allSchedule.loading = false;
+        },
+        'admin.allSchedule.list.fail': function(state) {
+            state.allSchedule.loading = false;
         }
     },
     actions: {
@@ -57,6 +73,23 @@ module.exports = {
                 return data;
             }, () => {
                 context.commit('admin.logCrontab.loading.false');
+            });
+        },
+        'admin.allSchedule.list.fetch': function(context, params) {
+            var keys = [
+                'page'
+            ];
+
+            var data = _.pick(params, keys);
+
+            context.commit('admin.allSchedule.list.loading');
+
+            return get('/admin/allschedule', data, false, false, false).then((data) => {
+                context.commit('admin.allSchedule.list.success', data);
+
+                return data;
+            }, () => {
+                context.commit('admin.allSchedule.list.fail');
             });
         }
     }

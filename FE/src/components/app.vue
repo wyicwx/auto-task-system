@@ -55,6 +55,9 @@
                 <el-menu-item index="/admin/syslog">
                     运行日志
                 </el-menu-item>
+                <el-menu-item index="/admin/allschedule">
+                    任务状况
+                </el-menu-item>
             </el-submenu>
 
             <el-menu-item index="/logout">
