@@ -21,7 +21,7 @@
                     <router-link :to="'/model/view/'+scope.row.model.id" target="_blank">{{scope.row.model.name}}</router-link>
                 </template>
             </el-table-column>
-            <el-table-column align="cneter" label="重试次数" width="50">
+            <el-table-column align="cneter" label="重试次数" width="100">
             </el-table-column>
             <el-table-column align="center" label="执行结果" width="100">
                 <template scope="scope">
