@@ -20,6 +20,9 @@ module.exports = {
                 if(!item.user) {
                     item.user = {};
                 }
+                if(!item.times) {
+                    item.times = {};
+                }
             });
             state.loading = false;
             state.list = data.list;
