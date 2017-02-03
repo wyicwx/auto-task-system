@@ -196,6 +196,7 @@ class TaskController extends BaseController {
             $schedule->tid = $task['id'];
             $schedule->mid = $task['mid'];
             $schedule->status = $result['code'] == 0 ? Schedule::STATUS_SUCCESS : Schedule::STATUS_FAIL;
+            $schedule->schedule_time = date('Y-m-d H:i:s');
 
             if($result['code'] == 0) {
                 $msg = '';

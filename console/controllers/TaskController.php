@@ -34,7 +34,6 @@ class TaskController extends Controller {
                 'status' => Task::STATUS_RUN,
                 'frequency' => $frequency
             ])
-            ->limit(20)
             ->asArray()
             ->all();
 
@@ -45,6 +44,7 @@ class TaskController extends Controller {
             $schedule->tid = $task['id'];
             $schedule->mid = $task['mid'];
             $schedule->status = Schedule::STATUS_UNRUN;
+            $schedule->schedule_time = date('Y-m-d H:i:s');
             $schedule->result = '';
 
             $schedule->save();
@@ -54,9 +54,13 @@ class TaskController extends Controller {
     public function actionRun() {
         $all = Schedule::find()
                 ->where([
-                    'status' => Schedule::STATUS_UNRUN
+                    'status' => [Schedule::STATUS_UNRUN, Schedule::STATUS_RETRY_UNRUN]
+                ])
+                ->andWhere([
+                    '<=', 'schedule_time', date('Y-m-d H:i:s')
                 ])
                 ->with(['task', 'model'])
+                ->limit(100)
                 ->all();
 
         $failTimes = 0;
@@ -81,7 +85,13 @@ class TaskController extends Controller {
                 $failTimes++;
             }
 
-            $schedule->status = $correct ? Schedule::STATUS_SUCCESS : Schedule::STATUS_FAIL;
+            if($schedule['times'] < $task['retry']) {
+                $schedule->status = Schedule::STATUS_RETRY_UNRUN;
+                $schedule->schedule_time = date('Y-m-d H:i:s',strtotime("+30 minute"));
+                $schedule->times += 1;
+            } else {
+                $schedule->status = $correct ? Schedule::STATUS_SUCCESS : Schedule::STATUS_FAIL;
+            }
             $schedule->result = $msg;
             $schedule->save();
         }

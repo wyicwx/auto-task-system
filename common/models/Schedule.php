@@ -14,6 +14,7 @@ class Schedule extends ActiveRecord {
     const STATUS_FAIL = 1;
     const STATUS_UNRUN = 2;
     const STATUS_TERMINATION = 3;
+    const STATUS_RETRY_UNRUN = 4;
 
     public function behaviors()
     {
