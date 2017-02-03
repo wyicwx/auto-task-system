@@ -64,19 +64,7 @@ class TaskController extends Controller {
             $model = $schedule->model;
             $code = $model->code;
 
-            $data = json_decode($task->data, true);
-
-            ob_start();
-
-            foreach ($data as $key => $value) {
-                echo '$'.$key.' = \''.$value.'\';';
-            }
-
-            echo $code;
-
-            $taskCode = ob_get_contents();
-            ob_end_clean();
-
+            $taskCode = SandBox::generateCode($code, $task->data);
             $result = SandBox::execute($taskCode);
 
             $correct = false;

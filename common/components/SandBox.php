@@ -41,7 +41,9 @@ class SandBox {
 
     static function execute($code) {
         $sandbox = static::getSandBox();
-
+        $sandbox->setErrorHandler(function($error) {
+            var_dump($error);
+        });
         ob_start();
 
         try {
@@ -56,5 +58,30 @@ class SandBox {
         ob_end_clean();
 
         return $result;
+    }
+
+    static function generateCode($code, $data) {
+        $data = json_decode($data, true);
+
+        ob_start();
+        echo 'try {';
+
+        foreach ($data as $key => $value) {
+            echo '$'.$key.' = \''.$value.'\';';
+        }
+
+        echo $code;
+
+        echo '} catch(Exception $error) {
+                return [
+                    "code" => -3,
+                    "msg" => "执行报错：".$error->getMessage()
+                ];
+            }';
+
+        $taskCode = ob_get_contents();
+        ob_end_clean();
+
+        return $taskCode;
     }
 }
