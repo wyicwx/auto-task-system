@@ -9,7 +9,8 @@ module.exports = {
         'frequency': 1,
         'data': {},
         'remark': '',
-        'loading': false
+        'loading': false,
+        'retry': 0
     },
     mutations: {
         'task.set': function(state, data) {
@@ -17,6 +18,7 @@ module.exports = {
             state.frequency = data.frequency;
             state.data = JSON.parse(data.data);
             state.remark = data.remark;
+            state.retry = data.retry;
             state.loading = false;
         },
         'task.reset': function(state) {
@@ -25,6 +27,7 @@ module.exports = {
             state.data = {};
             state.remark = '';
             state.loading = false;
+            state.retry = 0;
         },
         'task.loading': function(state) {
             state.loading = true
@@ -39,7 +42,8 @@ module.exports = {
                 'mid',
                 'frequency',
                 'data',
-                'remark'
+                'remark',
+                'retry'
             ];
 
             var data = pick(params, keys);
@@ -51,7 +55,8 @@ module.exports = {
                 'id',
                 'frequency',
                 'data',
-                'remark'
+                'remark',
+                'retry'
             ];
 
             var data = pick(params, keys);

@@ -43,6 +43,39 @@
 
             <el-row>
                 <el-col :span="12">
+                    <el-form-item label="是否重试" >
+                        <el-switch
+                          v-model="enableRetry"
+                          on-color="#13ce66"
+                          off-color="#ff4949">
+                        </el-switch>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+
+            <el-row>
+                <el-col :span="12" v-if="enableRetry">
+                    <el-form-item label="重试次数">
+                        <el-select v-model="task.retry">
+                            <el-option value="0">0</el-option>
+                            <el-option value="1">1</el-option>
+                            <el-option value="2">2</el-option>
+                            <el-option value="3">3</el-option>
+                            <el-option value="4">4</el-option>
+                            <el-option value="5">5</el-option>
+                            <el-option value="6">6</el-option>
+                            <el-option value="7">7</el-option>
+                            <el-option value="8">8</el-option>
+                            <el-option value="9">9</el-option>
+                            <el-option value="10">10</el-option>
+                        </el-select><br>
+                        <el-tag type="warning" :close-transition="true">重试将在失败后半小时执行</el-tag>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+
+            <el-row>
+                <el-col :span="12">
                     <el-form-item label="运行数据">
                         <el-input class="mb10" placeholder="请输入数据" v-model="task.data[item.name]" v-for="(item, index) in model.datatype">
                             <template slot="prepend">{{item.name}}</template>
@@ -76,12 +109,20 @@ module.exports = {
     data() {
         return {
             type: 'new',
-            task: this.$store.state.task
+            task: this.$store.state.task,
+            enableRetry: false
         }
     },
     computed: {
         model() {
             return this.$store.state.model;
+        }
+    },
+    watch: {
+        enableRetry(enable) {
+            if(!enable) {
+                this.task.retry = 0;
+            }
         }
     },
     created() {
@@ -101,6 +142,9 @@ module.exports = {
             this.$store.dispatch('task.fetch', {
                 id: this.$route.params.id
             }).then((data) => {
+                if(data.retry > 0) {
+                    this.enableRetry = true;
+                }
                 this.$store.dispatch('model.fetch', {
                     id: data.mid
                 });
@@ -109,6 +153,12 @@ module.exports = {
     },
     methods: {
         save() {
+            if(this.enableRetry && this.task.retry <= 0) {
+                return this.$message({
+                    message: '请选择重试次数！',
+                    type: 'warning'
+                });
+            }
             if(this.type == 'edit') {
                 this.$store.dispatch('task.update', this.task);
             } else {

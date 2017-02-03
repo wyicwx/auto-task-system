@@ -10,12 +10,14 @@ class TaskForm extends Model {
     public $frequency;
     public $remark;
     public $data = [];
+    public $retry = 0;
 
     public function rules() {
         return [
             [['frequency', 'data'], 'required'],
             ['frequency', 'frequencyValidate'],
             ['data', 'dataValidate'],
+            ['retry', 'retryValidate'],
             [['remark', 'id'], 'safe']
         ];
     }
@@ -27,6 +29,21 @@ class TaskForm extends Model {
                     $this->addError($attribute, '运行数据'.$key.'为必填项！');
                     return false;
                 }
+            }
+        }
+    }
+
+    public function retryValidate($attribute, $params) {
+        if(!$this->hasErrors()) {
+            $retry = (int) $this->retry;
+
+            if($retry < 0) {
+                $this->addError($attribute, '重试次数需在0~10之间！');
+                return false;
+            }
+            if($retry > Task::RETRY_MAX) {
+                $this->addError($attribute, '重试次数需在0~10之间！');
+                return false;
             }
         }
     }
@@ -51,16 +68,17 @@ class TaskForm extends Model {
 
     public function add($modelId) {
         if($this->validate()) {
-            $model = new Task();
+            $task = new Task();
 
-            $model->uid = Yii::$app->user->id;
-            $model->mid = $modelId;
-            $model->data = json_encode($this->data);
-            $model->frequency = $this->frequency;
-            $model->remark = $this->remark;
-            $model->status = Task::STATUS_RUN;
+            $task->uid = Yii::$app->user->id;
+            $task->mid = $modelId;
+            $task->data = json_encode($this->data);
+            $task->frequency = $this->frequency;
+            $task->remark = $this->remark;
+            $task->status = Task::STATUS_RUN;
+            $task->retry = $this->retry;
 
-            return $model->save() ? $model : null;
+            return $task->save() ? $task : null;
         } else {
             return false;
         }
@@ -73,6 +91,7 @@ class TaskForm extends Model {
             $task->data = json_encode($this->data);
             $task->frequency = $this->frequency;
             $task->remark = $this->remark;
+            $task->retry = $this->retry;
 
             return $task->save(false) ? $task : null;
         }

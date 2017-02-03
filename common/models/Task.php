@@ -23,6 +23,7 @@ class Task extends ActiveRecord {
         12 => 2, 
         24 => 1
     ]; // 间隔
+    const RETRY_MAX = 10;
 
 
     public function behaviors()

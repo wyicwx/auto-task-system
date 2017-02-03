@@ -21,6 +21,8 @@
                     <router-link :to="'/model/view/'+scope.row.model.id" target="_blank">{{scope.row.model.name}}</router-link>
                 </template>
             </el-table-column>
+            <el-table-column align="cneter" label="重试次数" width="50">
+            </el-table-column>
             <el-table-column align="center" label="执行结果" width="100">
                 <template scope="scope">
                     <a href="javascript:void(0)" v-if="scope.row.status == 1" @click="showDetail(scope.row.result)">查看详情</a>
