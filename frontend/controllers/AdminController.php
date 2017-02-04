@@ -63,7 +63,7 @@ class AdminController extends BaseController {
                         ])
                         ->setFrom(['task_auto@163.com' => '自动任务系统'])
                         ->setTo($user->email)
-                        ->setSubject('欢迎注册')
+                        ->setSubject('密码重置')
                         ->send();
 
                     return $this->renderAjax();
