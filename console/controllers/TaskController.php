@@ -85,7 +85,7 @@ class TaskController extends Controller {
                 $failTimes++;
             }
 
-            if($schedule['times'] < $task['retry']) {
+            if(!$correct && $schedule['times'] < $task['retry']) {
                 $schedule->status = Schedule::STATUS_RETRY_UNRUN;
                 $schedule->schedule_time = date('Y-m-d H:i:s',strtotime("+30 minute"));
                 $schedule->times += 1;
