@@ -1,54 +1,91 @@
-Yii 2 Advanced Project Template
+Online Auto Task System！
 ===============================
 
-Yii 2 Advanced Project Template is a skeleton [Yii 2](http://www.yiiframework.com/) application best for
-developing complex Web applications with multiple tiers.
 
-The template includes three tiers: front end, back end, and console, each of which
-is a separate Yii application.
-
-The template is designed to work in a team development environment. It supports
-deploying the application in different environments.
-
-Documentation is at [docs/guide/README.md](docs/guide/README.md).
-
-[![Latest Stable Version](https://poser.pugx.org/yiisoft/yii2-app-advanced/v/stable.png)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![Total Downloads](https://poser.pugx.org/yiisoft/yii2-app-advanced/downloads.png)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
-[![Build Status](https://travis-ci.org/yiisoft/yii2-app-advanced.svg?branch=master)](https://travis-ci.org/yiisoft/yii2-app-advanced)
-
-DIRECTORY STRUCTURE
+Setup
 -------------------
 
+Checkout code, and installing via [Composer](https://getcomposer.org/)
+
 ```
-common
-    config/              contains shared configurations
-    mail/                contains view files for e-mails
-    models/              contains model classes used in both backend and frontend
-console
-    config/              contains console configurations
-    controllers/         contains console controllers (commands)
-    migrations/          contains database migrations
-    models/              contains console-specific model classes
-    runtime/             contains files generated during runtime
-backend
-    assets/              contains application assets such as JavaScript and CSS
-    config/              contains backend configurations
-    controllers/         contains Web controller classes
-    models/              contains backend-specific model classes
-    runtime/             contains files generated during runtime
-    views/               contains view files for the Web application
-    web/                 contains the entry script and Web resources
-frontend
-    assets/              contains application assets such as JavaScript and CSS
-    config/              contains frontend configurations
-    controllers/         contains Web controller classes
-    models/              contains frontend-specific model classes
-    runtime/             contains files generated during runtime
-    views/               contains view files for the Web application
-    web/                 contains the entry script and Web resources
-    widgets/             contains frontend widgets
-vendor/                  contains dependent 3rd-party packages
-environments/            contains environment-based overrides
-tests                    contains various tests for the advanced application
-    codeception/         contains tests developed with Codeception PHP Testing Framework
+$ composer install 
+```
+
+Depending on your machine environment, modifying configure `environments/prod/common/config/main-local.php` or `environments/dev/common/config/main-local.php`. 
+
+```
+<?php
+return [
+    'components' => [
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'viewPath' => '@common/mail',
+            'useFileTransport' => false,    
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => '',
+                'username' => '',
+                'password' => '',
+                'port' => '',
+                'encryption' => '',
+            ]
+        ],
+        'urlManager' => [
+            'scriptUrl' => '',
+            'baseUrl' => ''
+        ],
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=127.0.0.1;dbname=task',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+            // 'enableParamLogging' => true,
+        ]
+    ]
+]
+
+```
+
+Run init to setup environment.
+
+```
+$ ./init
+```
+
+Import sql from `db.sql`
+
+Crontab Configure 
+-------------------
+
+After installing, set crontab for timing execution.
+
+```
+0 * * * * /path/to/bin/php /path/to/task/yii task/schedule > /dev/null
+*/5 * * * * /path/to/bin/php /path/to/task/yii task/run > /dev/null
+0 9 * * * /path/to/bin/php /path/to/task/yii task/notice am > /dev/null
+0 18 * * * /path/to/bin/php /path/to/task/yii task/notice pm > /dev/null
+50 */2 * * * /path/to/bin/php /path/to/task/yii times/model > /dev/null
+```
+
+Frontend 
+-------------------
+
+Installing via [npm](https://www.npmjs.com/), your need [webpack](https://webpack.github.io/) cli also.
+
+```
+$ npm install webpack -g
+```
+
+install dependencies.
+
+```
+$ cd FE
+$ npm install
+```
+
+run watch
+
+```
+$ webpack --watch
 ```
