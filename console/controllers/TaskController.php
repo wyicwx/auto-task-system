@@ -86,10 +86,12 @@ class TaskController extends Controller {
             $schedule->save();
         }
 
-        $log = new LogCrontab();
-        $log->times = count($all);
-        $log->fail_times = $failTimes;
-        $log->save();
+        if(count($all) > 0) {
+            $log = new LogCrontab();
+            $log->times = count($all);
+            $log->fail_times = $failTimes;
+            $log->save();
+        }
     }
     // 邮件汇总通知，每日9，18点通知一次
     public function actionNotice($during) {
