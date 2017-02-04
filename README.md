@@ -43,8 +43,7 @@ return [
             // 'enableParamLogging' => true,
         ]
     ]
-]
-
+];
 ```
 
 Run init to setup environment.
