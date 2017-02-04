@@ -16,15 +16,7 @@ return [
                 'password' => 'woleigequ1123456',
                 'port' => '465',
                 'encryption' => 'ssl',
-            ],
-            // 'transport' => [
-            //     'class' => 'Swift_SmtpTransport',
-            //     'host' => 'smtp.qq.com',
-            //     'username' => '236008243@qq.com',
-            //     'password' => 'fengfeng',        
-            //     'port' => '587',
-            //     'encryption' => 'tls',
-            // ],
+            ]
         ],
         'urlManager' => [
             'scriptUrl' => 'http://task.hexcoo.com',
