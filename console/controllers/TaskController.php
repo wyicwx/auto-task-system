@@ -74,7 +74,7 @@ class TaskController extends Controller {
                 $msg = '';
             } else {
                 $correct = false;
-                $msg = $result['msg'];
+                $msg = $result['msg'] ? $result['msg'] : '';
             }
 
             if(!$correct) {
