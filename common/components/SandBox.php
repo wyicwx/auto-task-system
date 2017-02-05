@@ -10,7 +10,9 @@ class SandBox {
         'rand',
         'json_decode',
         'json_encode',
-        'preg_match'
+        'preg_match',
+        'urlencode',
+        'urldecode'
     ];
 
     static function getSandBox() {
