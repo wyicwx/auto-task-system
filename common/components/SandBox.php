@@ -8,6 +8,10 @@ use Requests;
 class SandBox {
     const WHITE_LIST_FUNC = [
         'rand',
+	'count',
+	'empty',
+	'preg_match',
+	'preg_match_all',
         'json_decode',
         'json_encode',
         'preg_match',
