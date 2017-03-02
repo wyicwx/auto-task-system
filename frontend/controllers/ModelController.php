@@ -104,7 +104,10 @@ class ModelController extends BaseController {
             ])
             ->joinWith('times')
             ->with('user')
-            ->orderBy(Times::tableName().'.ratio desc');
+            ->orderBy([
+                Times::tableName().'.positive' => SORT_DESC,
+                Times::tableName().'.ratio' => SORT_DESC
+            ]);
         } else {
             $listAR = $listAR->where([
                 'uid' => Yii::$app->user->id
