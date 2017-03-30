@@ -71,7 +71,7 @@ class AdminController extends BaseController {
                 }
             }
 
-            return $this->renderAjaxError();
+            return $this->renderAjaxError(6);
         } else {
             return $this->renderAjaxError(-3);
         }
