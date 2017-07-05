@@ -3,6 +3,7 @@
 import { each } from 'lodash';
 import { Message } from 'element-ui';
 import { EventEmitter } from 'fbemitter';
+import 'whatwg-fetch';
 
 var emitter = EventEmitter.emitter;
 
@@ -30,7 +31,7 @@ function parseForm(body) {
 }
 
 module.exports = {
-    get: function(url, body = {}, headers = {}, globMessage = false, loading = true) {
+    get: function(url, body = {}, headers, globMessage = false, loading = true) {
         body[csrfParam] = csrf;
 
         if(url.indexOf('?') === -1) {
@@ -44,7 +45,7 @@ module.exports = {
 
         return fetch(url, {
             method: 'get',
-            headers: headers,
+            headers: headers || {},
             credentials: 'include'
         }).then((res) => {
             if(res.ok) {
@@ -77,9 +78,9 @@ module.exports = {
                 emitter.emit('fetch.end');
             }
 
-            if(data && data.msg) {
+            if(data && (data.msg || data.message)) {
                 Message.error({
-                    message: data.msg,
+                    message: data.msg || data.message,
                     duration: 2000,
                     showClose: true
                 });
@@ -94,7 +95,7 @@ module.exports = {
             return Promise.reject(data);
         });
     },
-    post: function(url, body = {}, headers = {}, globMessage = true, loading = true) {
+    post: function(url, body = {}, headers, globMessage = true, loading = true) {
         body[csrfParam] = csrf;
 
         headers['Content-Type'] = 'application/json';
@@ -104,7 +105,7 @@ module.exports = {
 
         return fetch(url, {
             method: 'post',
-            headers: headers,
+            headers: headers || {},
             credentials: 'include',
             body: JSON.stringify(body)
         }).then((res) => {

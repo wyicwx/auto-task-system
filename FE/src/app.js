@@ -7,6 +7,9 @@ import 'element-ui/lib/theme-default/index.css';
 import './less/app.less';
 import App from './components/app.vue';
 import { EventEmitter } from 'fbemitter';
+import Promise from 'es6-promise';
+
+Promise.polyfill();
 
 EventEmitter.emitter = new EventEmitter();
 
