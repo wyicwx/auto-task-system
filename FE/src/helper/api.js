@@ -98,6 +98,7 @@ module.exports = {
     post: function(url, body = {}, headers, globMessage = true, loading = true) {
         body[csrfParam] = csrf;
 
+        headers || (headers = {});
         headers['Content-Type'] = 'application/json';
         if(loading) {
             emitter.emit('fetch.start');
@@ -105,7 +106,7 @@ module.exports = {
 
         return fetch(url, {
             method: 'post',
-            headers: headers || {},
+            headers: headers,
             credentials: 'include',
             body: JSON.stringify(body)
         }).then((res) => {
